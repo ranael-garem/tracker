@@ -10,6 +10,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TrackerSerializer(serializers.HyperlinkedModelSerializer):
+    snippet = serializers.CharField(read_only=True)
+
     class Meta:
         model = models.Tracker
         fields = ('url', 'title', 'snippet')
