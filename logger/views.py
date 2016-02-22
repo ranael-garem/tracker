@@ -20,6 +20,7 @@ class TrackerViewSet(viewsets.ModelViewSet):
     """
     queryset = Tracker.objects.all()
     serializer_class = TrackerSerializer
+    permission_classes = permissions.OnlyAllow10Trackers,
 
     def get_queryset(self):
         """
