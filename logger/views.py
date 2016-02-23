@@ -60,4 +60,17 @@ class PageLoadView(APIView):
             request.session['user_id'] = page_load.user_id
 
         return Response({'user_id': request.session['user_id'],
-                        'loads': page_load.loads})
+                         'loads': page_load.loads})
+
+
+class UserIdView(APIView):
+    """
+    Returns the user_id if saved in current session
+    For Testing Purposes onluy
+    """
+
+    def get(self, request, format=None):
+        if 'user_id' in request.session:
+            return Response({'user_id': request.session['user_id']})
+        else:
+            return Response()
