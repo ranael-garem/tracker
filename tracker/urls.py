@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
     url(r'^test/$', views.UserIdView.as_view()),
+    url(r'^clear/$', views.ClearSessionView.as_view()),
 
 ]

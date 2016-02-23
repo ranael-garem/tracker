@@ -66,7 +66,7 @@ class PageLoadView(APIView):
 class UserIdView(APIView):
     """
     Returns the user_id if saved in current session
-    For Testing Purposes onluy
+    For Testing Purposes Only
     """
 
     def get(self, request, format=None):
@@ -74,3 +74,16 @@ class UserIdView(APIView):
             return Response({'user_id': request.session['user_id']})
         else:
             return Response()
+
+
+class ClearSessionView(APIView):
+    """
+    View responsible for clearing the current session
+    For Testing Purposes Only
+    """
+    def get(self, request, format=None):
+        try:
+            del request.session['user_id']
+        except KeyError:
+            pass
+        return Response("SESSION CLEARED")
