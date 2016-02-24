@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 
 class Tracker(models.Model):
@@ -9,3 +10,23 @@ class Tracker(models.Model):
     user = models.ForeignKey(User, related_name="trackers")
     title = models.CharField(max_length=256)
     snippet = models.CharField(max_length=256, default="JS Snippet")
+
+    def total_page_loads(self):
+        """
+        returns number of page loads for a Tracker
+        """
+        return self.page_loads.aggregate(models.Sum('loads'))["loads__sum"]
+
+
+class PageLoad(models.Model):
+    """
+    Represents the Loads of a page by a single user
+    saved in a session
+    """
+    tracker = models.ForeignKey(Tracker, related_name="page_loads")
+    # user_id = UUIDField(auto=True, unique=True)
+    user_id = models.UUIDField(default=uuid.uuid4)
+    loads = models.IntegerField(default=1)
+
+    class Meta:
+        unique_together = ('tracker', 'user_id')
