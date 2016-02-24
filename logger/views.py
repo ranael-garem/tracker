@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer, TrackerSerializer
+from .serializers import UserSerializer, TrackerSerializer, PageLoadSerializer
 from . import permissions
 from .models import Tracker, PageLoad
 
@@ -50,17 +50,15 @@ class PageLoadView(APIView):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
             (page_load, created) = PageLoad.objects.get_or_create(
-                user_id=user_id)
+                user_id=user_id, tracker_id=pk)
             if not created:
                 page_load.loads += 1
                 page_load.save()
-            print PageLoad.objects.get(user_id=user_id).loads
         else:
             page_load = PageLoad.objects.create(tracker_id=pk)
-            request.session['user_id'] = page_load.user_id
-
-        return Response({'user_id': request.session['user_id'],
-                         'loads': page_load.loads})
+            serializer = PageLoadSerializer(page_load)
+            request.session['user_id'] = serializer.data['user_id']
+        return Response({'user_id': request.session['user_id']})
 
 
 class UserIdView(APIView):
