@@ -2,9 +2,11 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer, TrackerSerializer, PageLoadSerializer
+from .serializers import (
+    UserSerializer, TrackerSerializer, PageLoadSerializer,
+    MouseClickSerializer)
 from . import permissions
-from .models import Tracker, PageLoad
+from .models import Tracker, PageLoad, MouseClick
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,6 +63,27 @@ class PageLoadView(APIView):
         return Response({'user_id': request.session['user_id']})
 
 
+class MouseClickView(APIView):
+    """
+    Creates or increments 'loads' of PageLoad Object
+    for the current user saved in the SESSION
+    """
+
+    def get(self, request, pk, format=None):
+        if 'user_id' in request.session:
+            user_id = request.session['user_id']
+            (mouse_click, created) = MouseClick.objects.get_or_create(
+                user_id=user_id, tracker_id=pk)
+            if not created:
+                mouse_click.clicks += 1
+                mouse_click.save()
+        else:
+            mouse_click = MouseClick.objects.create(tracker_id=pk)
+            serializer = MouseClickSerializer(mouse_click)
+            request.session['user_id'] = serializer.data['user_id']
+        return Response({'user_id': request.session['user_id']})
+
+
 class UserIdView(APIView):
     """
     Returns the user_id if saved in current session
@@ -79,6 +102,7 @@ class ClearSessionView(APIView):
     View responsible for clearing the current session
     For Testing Purposes Only
     """
+
     def get(self, request, format=None):
         try:
             del request.session['user_id']
