@@ -23,6 +23,6 @@ class OnlyAllow10Trackers(permissions.BasePermission):
         if request.method != "POST":
             return True
 
-        else:
+        elif request.user.is_authenticated():
             return Tracker.objects.filter(
                 user=request.user).count() < 10
