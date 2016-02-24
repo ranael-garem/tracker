@@ -17,6 +17,12 @@ class Tracker(models.Model):
         """
         return self.page_loads.aggregate(models.Sum('loads'))["loads__sum"]
 
+    def total_mouse_clicks(self):
+        """
+        returns total number of clicks for a page
+        """
+        return self.mouse_clicks.aggregate(models.Sum('clicks'))["clicks__sum"]
+
 
 class PageLoad(models.Model):
     """
@@ -27,6 +33,18 @@ class PageLoad(models.Model):
     # user_id = UUIDField(auto=True, unique=True)
     user_id = models.UUIDField(default=uuid.uuid4)
     loads = models.IntegerField(default=1)
+
+    class Meta:
+        unique_together = ('tracker', 'user_id')
+
+
+class MouseClick(models.Model):
+    """
+    Represents clicks of a single user on a page
+    """
+    tracker = models.ForeignKey(Tracker, related_name="mouse_clicks")
+    user_id = models.UUIDField(default=uuid.uuid4)
+    clicks = models.IntegerField(default=1)
 
     class Meta:
         unique_together = ('tracker', 'user_id')
