@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from uuidfield import UUIDField
+import uuid
 
 
 class Tracker(models.Model):
@@ -24,5 +24,9 @@ class PageLoad(models.Model):
     saved in a session
     """
     tracker = models.ForeignKey(Tracker, related_name="page_loads")
-    user_id = UUIDField(auto=True, unique=True)
+    # user_id = UUIDField(auto=True, unique=True)
+    user_id = models.UUIDField(default=uuid.uuid4)
     loads = models.IntegerField(default=1)
+
+    class Meta:
+        unique_together = ('tracker', 'user_id')
