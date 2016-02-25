@@ -9,10 +9,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'username')
 
 
-class TrackedUserSerializer(serializers.HyperlinkedModelSerializer):
+class TrackedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TrackedUser
-        fields = ('url', 'id', 'tracker', 'created_at')
+        fields = ('id', 'tracker', 'created_at')
 
 
 class PageLoadSerializer(serializers.ModelSerializer):
