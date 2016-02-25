@@ -133,7 +133,9 @@ class PopularityView(APIView):
     Calculation is based on the number of new users
     """
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk,
+            FY=None, FM=None, FD=None,
+            TY=None, TM=None, TD=None, format=None):
         all_users = TrackedUser.objects.filter(tracker=pk).count()
         
         last_day_users = TrackedUser.objects.filter(tracker=pk).exclude(
@@ -145,12 +147,32 @@ class PopularityView(APIView):
         last_month_users = TrackedUser.objects.filter(tracker=pk).exclude(
             created_at__gte=((datetime.datetime.now().date() - datetime.timedelta(days=30)))).count()
 
+        in_the_last_day = percentage_increase(
+            last_day_users, all_users)
+        in_the_last_week = percentage_increase(
+            last_week_users, all_users)
+        in_the_last_month = percentage_increase(
+            last_month_users, all_users)
 
+        if FM and FM and FD and TY and TM and TD:
+            from_users = TrackedUser.objects.filter(tracker=pk).exclude(
+                created_at__gte=datetime.date(
+                    int(FY), int(FM), int(FD)) + datetime.timedelta(days=1)
+            ).count()
+            to_users = TrackedUser.objects.filter(tracker=pk).exclude(
+                created_at__gte=datetime.date(
+                    int(TY), int(TM), int(TD)) + datetime.timedelta(days=1)
+            ).count()
+            from_to = percentage_increase(from_users, to_users)
+        else:
+            from_to = None
 
         return Response({
             'in_last_day': in_the_last_day,
             'in_last_week': in_the_last_week,
             'in_last_month': in_the_last_month,
+            'popularity_increase_from_to': from_to
+
         })
 
 

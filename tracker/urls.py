@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^click/(?P<pk>[0-9]+)/$', views.MouseClickView.as_view()),
     url(r'^popularity/(?P<pk>[0-9]+)/$',
         views.PopularityView.as_view()),
+    url(r'^popularity/(?P<pk>[0-9]+)/(?P<FY>\d{4})/(?P<FM>\d+)/(?P<FD>\d+)/(?P<TY>\d{4})/(?P<TM>\d+)/(?P<TD>\d+)/$',
+        views.PopularityView.as_view()),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
