@@ -20,7 +20,7 @@ class PageLoadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PageLoad
-        fields = ('user_id', 'tracker', 'loads')
+        fields = ('user_id', 'tracker', 'created_at')
 
 
 class MouseClickSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class MouseClickSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PageLoad
-        fields = ('user_id', 'tracker', 'clicks')
+        fields = ('user_id', 'tracker', 'created_at')
 
 
 class TrackerSerializer(serializers.HyperlinkedModelSerializer):
