@@ -174,6 +174,16 @@ class InteractivityView(APIView):
         tracker = Tracker.objects.get(id=pk)
         avg_clicks = float(tracker.total_mouse_clicks()) / \
             float(tracker.total_page_loads())
+
+        today_loads = PageLoad.objects.filter(
+            tracker=pk, created_at__gte=datetime.datetime.now().date()).count()
+        today_clicks = MouseClick.objects.filter(
+            tracker=pk, created_at__gte=datetime.datetime.now().date()).count()
+        if today_loads != 0:
+            avg_today = float(today_clicks) / float(today_loads)
+        else:
+            avg_today = None
         return Response({
             "avg_clicks": avg_clicks,
+            "avg_today": avg_today
         })
