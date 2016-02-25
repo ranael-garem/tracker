@@ -6,6 +6,7 @@ from logger import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'trackers', views.TrackerViewSet)
+router.register(r'tracked_users', views.TrackedUserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
