@@ -129,33 +129,15 @@ class PopularityView(APIView):
     def get(self, request, pk,
             FY=None, FM=None, FD=None,
             TY=None, TM=None, TD=None, format=None):
-        all_users = TrackedUser.objects.filter(tracker=pk).count()
 
-        last_day_users = TrackedUser.objects.filter(tracker=pk).exclude(
-            created_at__gte=datetime.datetime.now().date()).count()
-
-        last_week_users = TrackedUser.objects.filter(tracker=pk).exclude(
-            created_at__gte=((datetime.datetime.now().date() -
-                              datetime.timedelta(days=7)))).count()
-
-        last_month_users = TrackedUser.objects.filter(tracker=pk).exclude(
-            created_at__gte=((datetime.datetime.now().date() -
-                              datetime.timedelta(days=30)))).count()
-
-        in_the_last_day = percentage_increase(last_day_users, all_users)
-        in_the_last_week = percentage_increase(last_week_users, all_users)
-        in_the_last_month = percentage_increase(last_month_users, all_users)
+        [in_the_last_day, in_the_last_week,
+            in_the_last_month] = self.calculate_popularity(pk)
 
         if FM and FM and FD and TY and TM and TD:
-            from_users = TrackedUser.objects.filter(tracker=pk).exclude(
-                created_at__gte=datetime.date(
-                    int(FY), int(FM), int(FD)) + datetime.timedelta(days=1)
-            ).count()
-            to_users = TrackedUser.objects.filter(tracker=pk).exclude(
-                created_at__gte=datetime.date(
-                    int(TY), int(TM), int(TD)) + datetime.timedelta(days=1)
-            ).count()
-            from_to = percentage_increase(from_users, to_users)
+            from_to = self.calculate_popularity_from_to(
+                pk,
+                datetime.date(int(FY), int(FM), int(FD)),
+                datetime.date(int(TY), int(TM), int(TD)))
         else:
             from_to = None
 
@@ -166,6 +148,44 @@ class PopularityView(APIView):
             'popularity_increase_from_to': from_to
 
         })
+
+    def calculate_popularity(self, tracker_id):
+        """
+        Calcualtes popularity increase in the last day, week, month
+        """
+        all_users = TrackedUser.objects.filter(tracker=tracker_id).count()
+
+        last_day_users = TrackedUser.objects.filter(
+            tracker=tracker_id).exclude(
+            created_at__gte=datetime.datetime.now().date()).count()
+
+        last_week_users = TrackedUser.objects.filter(
+            tracker=tracker_id).exclude(
+            created_at__gte=((datetime.datetime.now().date() -
+                              datetime.timedelta(days=7)))).count()
+
+        last_month_users = TrackedUser.objects.filter(
+            tracker=tracker_id).exclude(
+            created_at__gte=((datetime.datetime.now().date() -
+                              datetime.timedelta(days=30)))).count()
+
+        in_the_last_day = percentage_increase(last_day_users, all_users)
+        in_the_last_week = percentage_increase(last_week_users, all_users)
+        in_the_last_month = percentage_increase(last_month_users, all_users)
+
+        return [in_the_last_day, in_the_last_week, in_the_last_month]
+
+    def calculate_popularity_from_to(self, tracker_id, from_date, to_date):
+        """
+        Calculates popularity increase given a from_date and to_date
+        """
+        from_users = TrackedUser.objects.filter(tracker=tracker_id).exclude(
+            created_at__gte=from_date + datetime.timedelta(days=1)).count()
+
+        to_users = TrackedUser.objects.filter(tracker=tracker_id).exclude(
+            created_at__gte=to_date + datetime.timedelta(days=1)
+        ).count()
+        return percentage_increase(from_users, to_users)
 
 
 class InteractivityView(APIView):
