@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -6,6 +7,7 @@ from .serializers import (
     UserSerializer, TrackerSerializer, TrackedUserSerializer)
 from . import permissions
 from .models import Tracker, TrackedUser, PageLoad, MouseClick
+from .helpers import percentage_increase
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,6 +22,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class TrackedUserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
+    #TODO Change to ListApiView
     """
     queryset = TrackedUser.objects.all()
     serializer_class = TrackedUserSerializer
@@ -121,3 +124,37 @@ class ClearSessionView(APIView):
         except KeyError:
             pass
         return Response("SESSION CLEARED")
+
+
+class PopularityView(APIView):
+    """
+    Calculates the Popularity Increase% in the last day, last week, last month
+    and if given a specified from/to date. \n
+    Calculation is based on the number of new users
+    """
+
+    def get(self, request, pk, format=None):
+        all_users = TrackedUser.objects.filter(tracker=pk).count()
+        
+        last_day_users = TrackedUser.objects.filter(tracker=pk).exclude(
+            created_at__gte=datetime.datetime.now().date()).count()
+
+        last_week_users = TrackedUser.objects.filter(tracker=pk).exclude(
+            created_at__gte=((datetime.datetime.now().date() - datetime.timedelta(days=7)))).count()
+        
+        last_month_users = TrackedUser.objects.filter(tracker=pk).exclude(
+            created_at__gte=((datetime.datetime.now().date() - datetime.timedelta(days=30)))).count()
+
+
+
+        return Response({
+            'in_last_day': in_the_last_day,
+            'in_last_week': in_the_last_week,
+            'in_last_month': in_the_last_month,
+        })
+
+
+class InteractivityView(APIView):
+
+    def get(self, request, format=None):
+        pass
