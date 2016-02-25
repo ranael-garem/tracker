@@ -55,21 +55,18 @@ class TrackerViewSet(viewsets.ModelViewSet):
 
 class PageLoadView(APIView):
     """
-    Creates or increments 'loads' of PageLoad Object
-    for the current user saved in the SESSION
+    Creates a PageLoad Object for the current user saved/creates in the SESSION
     """
 
     def get(self, request, pk, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
-            (page_load, created) = PageLoad.objects.get_or_create(
+            PageLoad.objects.create(
                 user_id=user_id, tracker_id=pk)
-            if not created:
-                page_load.loads += 1
-                page_load.save()
+
         else:
             tracked_user = TrackedUser.objects.create(tracker_id=pk)
-            page_load = PageLoad.objects.create(
+            PageLoad.objects.create(
                 tracker_id=pk, user_id=tracked_user.id)
             serializer = TrackedUserSerializer(tracked_user)
             request.session['user_id'] = serializer.data['id']
@@ -78,22 +75,18 @@ class PageLoadView(APIView):
 
 class MouseClickView(APIView):
     """
-    Creates or increments 'loads' of PageLoad Object
-    for the current user saved in the SESSION
+    Creates a MouseClick Object for the current user
+    saved/created in the SESSION
     """
 
     def get(self, request, pk, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
-            (mouse_click, created) = MouseClick.objects.get_or_create(
-                user_id=user_id, tracker_id=pk)
-            if not created:
-                mouse_click.clicks += 1
-                mouse_click.save()
+            MouseClick.objects.create(user_id=user_id, tracker_id=pk)
+
         else:
             tracked_user = TrackedUser.objects.create(tracker_id=pk)
-            mouse_click = MouseClick.objects.create(
-                tracker_id=pk, user_id=tracked_user.id)
+            MouseClick.objects.create(tracker_id=pk, user_id=tracked_user.id)
             serializer = TrackedUserSerializer(tracked_user)
             request.session['user_id'] = serializer.data['id']
         return Response({'user_id': request.session['user_id']})
