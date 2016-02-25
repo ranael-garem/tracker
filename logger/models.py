@@ -11,6 +11,9 @@ class Tracker(models.Model):
     title = models.CharField(max_length=256)
     snippet = models.CharField(max_length=256, default="JS Snippet")
 
+    def __unicode__(self):
+        return self.title
+
     def total_page_loads(self):
         """
         returns number of page loads for a Tracker
@@ -32,6 +35,10 @@ class TrackedUser (models.Model):
     tracker = models.ForeignKey(Tracker)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __unicode__(self):
+        return "ID: %s \n Tracker: %s \n created_at: %s" % (
+            self.id, self.tracker, self.created_at)
+
 
 class PageLoad(models.Model):
     """
@@ -46,6 +53,10 @@ class PageLoad(models.Model):
     class Meta:
         unique_together = ('tracker', 'user_id')
 
+    def __unicode__(self):
+        return "Tracker: %s \n User_Id: %s \n Loads: %s" % (
+            self.tracker, self.user_id, self.loads)
+
 
 class MouseClick(models.Model):
     """
@@ -57,3 +68,7 @@ class MouseClick(models.Model):
 
     class Meta:
         unique_together = ('tracker', 'user_id')
+
+    def __unicode__(self):
+        return "Tracker: %s \n User_Id: %s \n Clicks: %s" % (
+            self.tracker, self.user_id, self.clicks)
