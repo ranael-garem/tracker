@@ -26,3 +26,11 @@ class OnlyAllow10Trackers(permissions.BasePermission):
         elif request.user.is_authenticated():
             return Tracker.objects.filter(
                 user=request.user).count() < 10
+
+
+class OnlyAllowSafeMethods(permissions.BasePermission):
+    """
+    Only allows Safe Methods eg: GET
+    """
+    def has_permission(self, request, view):
+        return request.method in permissions.SAFE_METHODS

@@ -24,6 +24,15 @@ class Tracker(models.Model):
         return self.mouse_clicks.aggregate(models.Sum('clicks'))["clicks__sum"]
 
 
+class TrackedUser (models.Model):
+    """
+    A Single TrackedUser Entry where id is saved in Session
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    tracker = models.ForeignKey(Tracker)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class PageLoad(models.Model):
     """
     Represents the Loads of a page by a single user
