@@ -177,5 +177,10 @@ class PopularityView(APIView):
 
 class InteractivityView(APIView):
 
-    def get(self, request, format=None):
-        pass
+    def get(self, request, pk, format=None):
+        tracker = Tracker.objects.get(id=pk)
+        avg_clicks = float(tracker.total_mouse_clicks()) / \
+            float(tracker.total_page_loads())
+        return Response({
+            "avg_clicks": avg_clicks,
+        })
