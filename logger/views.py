@@ -3,10 +3,9 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import (
-    UserSerializer, TrackerSerializer, PageLoadSerializer,
-    MouseClickSerializer)
+    UserSerializer, TrackerSerializer, TrackedUserSerializer)
 from . import permissions
-from .models import Tracker, PageLoad, MouseClick
+from .models import Tracker, TrackedUser, PageLoad, MouseClick
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -16,6 +15,15 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = permissions.IsCurrentUser,
+
+
+class TrackedUserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = TrackedUser.objects.all()
+    serializer_class = TrackedUserSerializer
+    permission_classes = permissions.OnlyAllowSafeMethods,
 
 
 class TrackerViewSet(viewsets.ModelViewSet):
@@ -57,9 +65,11 @@ class PageLoadView(APIView):
                 page_load.loads += 1
                 page_load.save()
         else:
-            page_load = PageLoad.objects.create(tracker_id=pk)
-            serializer = PageLoadSerializer(page_load)
-            request.session['user_id'] = serializer.data['user_id']
+            tracked_user = TrackedUser.objects.create(tracker_id=pk)
+            page_load = PageLoad.objects.create(
+                tracker_id=pk, user_id=tracked_user.id)
+            serializer = TrackedUserSerializer(tracked_user)
+            request.session['user_id'] = serializer.data['id']
         return Response({'user_id': request.session['user_id']})
 
 
@@ -78,9 +88,11 @@ class MouseClickView(APIView):
                 mouse_click.clicks += 1
                 mouse_click.save()
         else:
-            mouse_click = MouseClick.objects.create(tracker_id=pk)
-            serializer = MouseClickSerializer(mouse_click)
-            request.session['user_id'] = serializer.data['user_id']
+            tracked_user = TrackedUser.objects.create(tracker_id=pk)
+            mouse_click = MouseClick.objects.create(
+                tracker_id=pk, user_id=tracked_user.id)
+            serializer = TrackedUserSerializer(tracked_user)
+            request.session['user_id'] = serializer.data['id']
         return Response({'user_id': request.session['user_id']})
 
 
