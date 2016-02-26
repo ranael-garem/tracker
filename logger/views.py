@@ -156,18 +156,18 @@ class PopularityView(APIView):
         all_users = TrackedUser.objects.filter(tracker=tracker_id).count()
 
         last_day_users = TrackedUser.objects.filter(
-            tracker=tracker_id).exclude(
-            created_at__gte=datetime.datetime.now().date()).count()
+            tracker=tracker_id,
+            created_at__lt=datetime.datetime.now().date()).count()
 
         last_week_users = TrackedUser.objects.filter(
-            tracker=tracker_id).exclude(
-            created_at__gte=((datetime.datetime.now().date() -
-                              datetime.timedelta(days=7)))).count()
+            tracker=tracker_id,
+            created_at__lt=((datetime.datetime.now().date() -
+                             datetime.timedelta(days=7)))).count()
 
         last_month_users = TrackedUser.objects.filter(
-            tracker=tracker_id).exclude(
-            created_at__gte=((datetime.datetime.now().date() -
-                              datetime.timedelta(days=30)))).count()
+            tracker=tracker_id,
+            created_at__lt=((datetime.datetime.now().date() -
+                             datetime.timedelta(days=30)))).count()
 
         in_the_last_day = percentage_increase(last_day_users, all_users)
         in_the_last_week = percentage_increase(last_week_users, all_users)
