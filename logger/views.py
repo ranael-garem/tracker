@@ -189,21 +189,74 @@ class PopularityView(APIView):
 
 
 class InteractivityView(APIView):
+    """
+    Calculates average interactivity, interactivity in the current day, and
+    interactivity in each day specified in a given time range (From/To date)
+    """
 
-    def get(self, request, pk, format=None):
-        tracker = Tracker.objects.get(id=pk)
+    def get(self, request, pk,
+            FY=None, FM=None, FD=None,
+            TY=None, TM=None, TD=None, format=None):
+
+        [avg_clicks, avg_today] = self.calculate_interactivity(pk)
+
+        if FM and FM and FD and TY and TM and TD:
+            from_date = datetime.date(int(FY), int(FM), int(FD))
+            to_date = datetime.date(int(TY), int(TM), int(TD))
+            from_to_values = self.calculate_interactivity_from_to(
+                pk, from_date, to_date)
+            pass
+
+        return Response({
+            "avg_clicks": avg_clicks,
+            "avg_today": avg_today,
+            "from_to_values": from_to_values,
+        })
+
+    def calculate_interactivity(self, tracker_id):
+        """
+        Calculates average all time interactivity, and in the current day
+        """
+        tracker = Tracker.objects.get(id=tracker_id)
         avg_clicks = float(tracker.total_mouse_clicks()) / \
             float(tracker.total_page_loads())
 
         today_loads = PageLoad.objects.filter(
-            tracker=pk, created_at__gte=datetime.datetime.now().date()).count()
+            tracker=tracker_id,
+            created_at__gte=datetime.datetime.now().date()).count()
         today_clicks = MouseClick.objects.filter(
-            tracker=pk, created_at__gte=datetime.datetime.now().date()).count()
+            tracker=tracker_id,
+            created_at__gte=datetime.datetime.now().date()).count()
         if today_loads != 0:
             avg_today = float(today_clicks) / float(today_loads)
         else:
             avg_today = None
-        return Response({
-            "avg_clicks": avg_clicks,
-            "avg_today": avg_today
-        })
+
+        return [avg_clicks, avg_today]
+
+    def calculate_interactivity_from_to(self, tracker_id, from_date, to_date):
+        """
+        Calculates Interactivity for each day in the timerange specified
+        (From/To date)
+        Returns list of [day, interactivity value]
+        """
+        list = []
+        delta = datetime.timedelta(days=1)
+        while from_date <= to_date:
+            loads = PageLoad.objects.filter(
+                tracker=tracker_id,
+                created_at__year=from_date.year,
+                created_at__month=from_date.month,
+                created_at__day=from_date.day).count()
+            clicks = MouseClick.objects.filter(
+                tracker=tracker_id,
+                created_at__year=from_date.year,
+                created_at__month=from_date.month,
+                created_at__day=from_date.day).count()
+            if loads != 0:
+                list.append([from_date, float(clicks) / float(loads)])
+            else:
+                list.append([from_date, None])
+            from_date += delta
+
+        return list
