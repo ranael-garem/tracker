@@ -18,13 +18,13 @@ class Tracker(models.Model):
         """
         returns number of page loads for a Tracker
         """
-        return self.page_loads.aggregate(models.Sum('loads'))["loads__sum"]
+        return self.page_loads.count()
 
     def total_mouse_clicks(self):
         """
         returns total number of clicks for a page
         """
-        return self.mouse_clicks.aggregate(models.Sum('clicks'))["clicks__sum"]
+        return self.mouse_clicks.count()
 
 
 class TrackedUser (models.Model):
@@ -46,16 +46,12 @@ class PageLoad(models.Model):
     saved in a session
     """
     tracker = models.ForeignKey(Tracker, related_name="page_loads")
-    # user_id = UUIDField(auto=True, unique=True)
     user_id = models.UUIDField(default=uuid.uuid4)
-    loads = models.IntegerField(default=1)
-
-    class Meta:
-        unique_together = ('tracker', 'user_id')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "Tracker: %s \n User_Id: %s \n Loads: %s" % (
-            self.tracker, self.user_id, self.loads)
+        return "Tracker: %s \n User_Id: %s \n Created_at: %s" % (
+            self.tracker, self.user_id, self.created_at)
 
 
 class MouseClick(models.Model):
@@ -64,11 +60,8 @@ class MouseClick(models.Model):
     """
     tracker = models.ForeignKey(Tracker, related_name="mouse_clicks")
     user_id = models.UUIDField(default=uuid.uuid4)
-    clicks = models.IntegerField(default=1)
-
-    class Meta:
-        unique_together = ('tracker', 'user_id')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "Tracker: %s \n User_Id: %s \n Clicks: %s" % (
-            self.tracker, self.user_id, self.clicks)
+        return "Tracker: %s \n User_Id: %s \n Created_at: %s" % (
+            self.tracker, self.user_id, self.created_at)
