@@ -1,7 +1,8 @@
 import datetime
 from django.utils import timezone
-from rest_framework.reverse import reverse
+from django.db.models import Count, Sum
 from django.contrib.auth.models import User
+from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -269,7 +270,8 @@ class InteractivityView(APIView):
             to_date = datetime.date(int(TY), int(TM), int(TD))
             from_to_values = self.calculate_interactivity_from_to(
                 pk, from_date, to_date)
-            pass
+        else:
+            from_to_values = []
 
         return Response({
             "avg_clicks": avg_clicks,
@@ -281,15 +283,19 @@ class InteractivityView(APIView):
         """
         Calculates average all time interactivity, and in the current day
         """
-        tracker = Tracker.objects.get(id=tracker_id)
-        avg_clicks = float(tracker.total_mouse_clicks()) / \
-            float(tracker.total_page_loads())
+        page_loads = Session.objects.filter(tracker_id=tracker_id).annotate(
+            loads=Count('page_loads')).aggregate(Sum('loads'))['loads__sum']
+        mouse_clicks = Session.objects.filter(tracker_id=tracker_id).annotate(
+            clicks=Count('mouse_clicks')).aggregate(
+            Sum('clicks'))['clicks__sum']
+        avg_clicks = float(page_loads) / float(mouse_clicks)
 
+        sessions = Tracker.objects.get(id=tracker_id).sessions.values('id')
         today_loads = PageLoad.objects.filter(
-            tracker=tracker_id,
+            session__in=sessions,
             created_at__gte=datetime.datetime.now().date()).count()
         today_clicks = MouseClick.objects.filter(
-            tracker=tracker_id,
+            session__in=sessions,
             created_at__gte=datetime.datetime.now().date()).count()
         if today_loads != 0:
             avg_today = float(today_clicks) / float(today_loads)
@@ -305,15 +311,16 @@ class InteractivityView(APIView):
         Returns list of [day, interactivity value]
         """
         list = []
+        sessions = Tracker.objects.get(id=tracker_id).sessions.values('id')
         delta = datetime.timedelta(days=1)
         while from_date <= to_date:
             loads = PageLoad.objects.filter(
-                tracker=tracker_id,
+                session__in=sessions,
                 created_at__year=from_date.year,
                 created_at__month=from_date.month,
                 created_at__day=from_date.day).count()
             clicks = MouseClick.objects.filter(
-                tracker=tracker_id,
+                session__in=sessions,
                 created_at__year=from_date.year,
                 created_at__month=from_date.month,
                 created_at__day=from_date.day).count()
