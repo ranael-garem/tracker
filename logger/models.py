@@ -2,6 +2,7 @@ import uuid
 import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Tracker(models.Model):
@@ -37,7 +38,7 @@ class Session(models.Model):
     user_id = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
     expiry_date = models.DateTimeField(
-        default=datetime.datetime.now + datetime.timedelta(minutes=30))
+        default=timezone.now() + datetime.timedelta(minutes=30))
 
     def __unicode__(self):
         return "TRACKER: %s, USER: %s, created_at: %s, expiry_date: %s " % (
@@ -45,13 +46,13 @@ class Session(models.Model):
 
     def total_page_loads(self):
         """
-        returns number of page loads for a Tracker
+        returns number of page loads for a User's Session
         """
         return self.page_loads.count()
 
     def total_mouse_clicks(self):
         """
-        returns total number of clicks for a page
+        returns total number of clicks for a User's Session
         """
         return self.mouse_clicks.count()
 
