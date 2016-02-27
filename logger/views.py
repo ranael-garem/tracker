@@ -1,4 +1,5 @@
 import datetime
+from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -8,6 +9,18 @@ from .serializers import (
 from . import permissions
 from .models import Tracker, TrackedUser, PageLoad, MouseClick
 from .helpers import percentage_increase
+
+
+class APIRoot(APIView):
+    def get(self, request):
+        return Response({
+            'users': reverse('user-list', request=request),
+            'trackers': reverse('tracker-list', request=request),
+            'tracked_users': reverse('trackeduser-list', request=request),
+            'clear_session': reverse('clear', request=request),
+            'current_user_id': reverse('user-id', request=request),
+
+        })
 
 
 class UserViewSet(viewsets.ModelViewSet):

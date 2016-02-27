@@ -10,6 +10,7 @@ router.register(r'tracked_users', views.TrackedUserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^api/$', views.APIRoot.as_view()),
     url(r'^load/(?P<pk>[0-9]+)/$', views.PageLoadView.as_view()),
     url(r'^click/(?P<pk>[0-9]+)/$', views.MouseClickView.as_view()),
     url(r'^popularity/(?P<pk>[0-9]+)/$', views.PopularityView.as_view()),
@@ -21,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',
         include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^test/$', views.UserIdView.as_view()),
-    url(r'^clear/$', views.ClearSessionView.as_view()),
+    url(r'^user/$', views.UserIdView.as_view(), name="user-id"),
+    url(r'^clear/$', views.ClearSessionView.as_view(), name="clear"),
 
 ]
