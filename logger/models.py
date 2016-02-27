@@ -1,6 +1,7 @@
+import uuid
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
-import uuid
 
 
 class Tracker(models.Model):
@@ -38,6 +39,21 @@ class TrackedUser (models.Model):
     def __unicode__(self):
         return "ID: %s \n Tracker: %s \n created_at: %s" % (
             self.id, self.tracker, self.created_at)
+
+
+class Session(models.Model):
+    """
+    Represents TrackedUser Session (tracks user activities)
+    """
+    tracker = models.ForeignKey(Tracker, related_name="sessions")
+    user_id = models.UUIDField(default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expiry_date = models.DateTimeField(
+        default=datetime.datetime.now + datetime.timedelta(minutes=30))
+
+    def __unicode__(self):
+        return "TRACKER: %s, USER: %s, created_at: %s, expiry_date: %s " % (
+            self.tracker, self.user_id, self.created_at, self.expiry_date)
 
 
 class PageLoad(models.Model):
