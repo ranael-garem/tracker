@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from rest_framework import viewsets
@@ -7,7 +8,9 @@ from rest_framework.response import Response
 from .serializers import (
     UserSerializer, TrackerSerializer, TrackedUserSerializer)
 from . import permissions
-from .models import Tracker, TrackedUser, PageLoad, MouseClick
+from .models import (
+    MouseClick, PageLoad, Tracker,
+    TrackedUser, Session)
 from .helpers import percentage_increase
 
 
@@ -68,54 +71,102 @@ class TrackerViewSet(viewsets.ModelViewSet):
 
 class PageLoadView(APIView):
     """
-    Creates a PageLoad Object for the current user saved/creates in the SESSION
+    Creates a PageLoad Object for the current user saved/created in the SESSION
+    # TODO: page field
     """
 
     def get(self, request, pk, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
-            PageLoad.objects.create(
-                user_id=user_id, tracker_id=pk)
+        else:
+            user_id = TrackedUserSerializer(
+                TrackedUser.objects.create(tracker_id=pk)).data['id']
+            request.session['user_id'] = user_id
+
+        if 'session_id' in request.session:
+            user_session = Session.objects.get(
+                id=request.session['session_id'])
+            if user_session.expiry_date < timezone.now():
+                print "EXPIRED"
+                del request.session['session_id']
+                user_session = Session.objects.create(
+                    tracker_id=pk, user_id=user_id)
+                request.session['session_id'] = user_session.id
+            else:
+                print "UPDATE_EXPIRY_DATE"
+                user_session.expiry_date += datetime.timedelta(minutes=30)
+                user_session.save()
 
         else:
-            tracked_user = TrackedUser.objects.create(tracker_id=pk)
-            PageLoad.objects.create(
-                tracker_id=pk, user_id=tracked_user.id)
-            serializer = TrackedUserSerializer(tracked_user)
-            request.session['user_id'] = serializer.data['id']
-        return Response({'user_id': request.session['user_id']})
+            print 'USER', user_id
+            user_session = Session.objects.create(
+                tracker_id=pk, user_id=user_id)
+            request.session['session_id'] = user_session.id
+
+        PageLoad.objects.create(session=user_session, user_id=user_id)
+
+        return Response({'user_id': request.session['user_id'],
+                         'session_id': request.session['session_id']},
+                        )
 
 
 class MouseClickView(APIView):
     """
     Creates a MouseClick Object for the current user
     saved/created in the SESSION
+    # TODO: page field
     """
 
     def get(self, request, pk, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
-            MouseClick.objects.create(user_id=user_id, tracker_id=pk)
+        else:
+            user_id = TrackedUserSerializer(
+                TrackedUser.objects.create(tracker_id=pk)).data['id']
+            request.session['user_id'] = user_id
+
+        if 'session_id' in request.session:
+            user_session = Session.objects.get(
+                id=request.session['session_id'])
+            if user_session.expiry_date < timezone.now():
+                print "EXPIRED"
+                del request.session['session_id']
+                user_session = Session.objects.create(
+                    tracker_id=pk, user_id=user_id)
+                request.session['session_id'] = user_session.id
+            else:
+                print "UPDATE_EXPIRY_DATE"
+                user_session.expiry_date += datetime.timedelta(minutes=30)
+                user_session.save()
 
         else:
-            tracked_user = TrackedUser.objects.create(tracker_id=pk)
-            MouseClick.objects.create(tracker_id=pk, user_id=tracked_user.id)
-            serializer = TrackedUserSerializer(tracked_user)
-            request.session['user_id'] = serializer.data['id']
-        return Response({'user_id': request.session['user_id']})
+            print 'USER', user_id
+            user_session = Session.objects.create(
+                tracker_id=pk, user_id=user_id)
+            request.session['session_id'] = user_session.id
+
+        MouseClick.objects.create(session=user_session, user_id=user_id)
+
+        return Response({'user_id': request.session['user_id'],
+                         'session_id': request.session['session_id']},
+                        )
 
 
-class UserIdView(APIView):
+class UserIdSessionIdView(APIView):
     """
-    Returns the user_id if saved in current session
+    Returns the user_id and session_id if saved in current session
     For Testing Purposes Only
     """
 
     def get(self, request, format=None):
+        context = {}
+
         if 'user_id' in request.session:
-            return Response({'user_id': request.session['user_id']})
-        else:
-            return Response()
+            context.update({'user_id': request.session['user_id']})
+        if 'session_id' in request.session:
+            context.update({'session_id': request.session['session_id']})
+
+        return Response(context)
 
 
 class ClearSessionView(APIView):
