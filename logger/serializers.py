@@ -15,12 +15,18 @@ class TrackedUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'tracker', 'created_at')
 
 
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Session
+        fields = ('__all__')
+
+
 class PageLoadSerializer(serializers.ModelSerializer):
     user_id = serializers.UUIDField()
 
     class Meta:
         model = models.PageLoad
-        fields = ('user_id', 'tracker', 'created_at')
+        fields = ('user_id', 'session', 'created_at')
 
 
 class MouseClickSerializer(serializers.ModelSerializer):
@@ -28,16 +34,13 @@ class MouseClickSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PageLoad
-        fields = ('user_id', 'tracker', 'created_at')
+        fields = ('user_id', 'session', 'created_at')
 
 
 class TrackerSerializer(serializers.HyperlinkedModelSerializer):
-    page_loads = PageLoadSerializer(many=True, read_only=True)
-    # mouse_clicks = MouseClickSerializer(many=True, read_only=True)
-
+    sessions = SessionSerializer(many=True, read_only=True)
     snippet = serializers.CharField(read_only=True)
 
     class Meta:
         model = models.Tracker
-        fields = ('url', 'title', 'snippet', 'page_loads',
-                  'total_page_loads', 'total_mouse_clicks')
+        fields = ('url', 'title', 'snippet', 'sessions')
