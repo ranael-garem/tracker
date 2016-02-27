@@ -15,18 +15,6 @@ class Tracker(models.Model):
     def __unicode__(self):
         return self.title
 
-    def total_page_loads(self):
-        """
-        returns number of page loads for a Tracker
-        """
-        return self.page_loads.count()
-
-    def total_mouse_clicks(self):
-        """
-        returns total number of clicks for a page
-        """
-        return self.mouse_clicks.count()
-
 
 class TrackedUser (models.Model):
     """
@@ -54,6 +42,18 @@ class Session(models.Model):
     def __unicode__(self):
         return "TRACKER: %s, USER: %s, created_at: %s, expiry_date: %s " % (
             self.tracker, self.user_id, self.created_at, self.expiry_date)
+
+    def total_page_loads(self):
+        """
+        returns number of page loads for a Tracker
+        """
+        return self.page_loads.count()
+
+    def total_mouse_clicks(self):
+        """
+        returns total number of clicks for a page
+        """
+        return self.mouse_clicks.count()
 
 
 class PageLoad(models.Model):
