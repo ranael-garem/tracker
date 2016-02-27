@@ -61,23 +61,25 @@ class PageLoad(models.Model):
     Represents the Loads of a page by a single user
     saved in a session
     """
-    tracker = models.ForeignKey(Tracker, related_name="page_loads")
+    session = models.ForeignKey(Session, related_name="page_loads")
     user_id = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
+    page = models.CharField(max_length=128, blank=True, null=True)
 
     def __unicode__(self):
-        return "Tracker: %s \n User_Id: %s \n Created_at: %s" % (
-            self.tracker, self.user_id, self.created_at)
+        return "Session: %s \n User_Id: %s \n Created_at: %s, Page: %s" % (
+            self.session, self.user_id, self.created_at, self.page)
 
 
 class MouseClick(models.Model):
     """
     Represents clicks of a single user on a page
     """
-    tracker = models.ForeignKey(Tracker, related_name="mouse_clicks")
+    session = models.ForeignKey(Session, related_name="mouse_clicks")
     user_id = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
+    page = models.CharField(max_length=128, blank=True, null=True)
 
     def __unicode__(self):
-        return "Tracker: %s \n User_Id: %s \n Created_at: %s" % (
-            self.tracker, self.user_id, self.created_at)
+        return "Session: %s \n User_Id: %s \n Created_at: %s, Page: %s" % (
+            self.session, self.user_id, self.created_at, self.page)
