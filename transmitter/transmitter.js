@@ -1,3 +1,9 @@
+var tracker_id = 1;
+var title = document.title
+var url = window.location.href
+var pathname = window.location.pathname
+
+
 var HttpClient = function() {
     this.get = function(Url, Callback) {
         var HttpRequest = new XMLHttpRequest();
@@ -14,7 +20,7 @@ var HttpClient = function() {
 document.onreadystatechange = function () {
      if (document.readyState == "complete") {
      	Client = new HttpClient();
-		Client.get('http://127.0.0.1:8000/load/1/', function(response) {
+		Client.get('http://127.0.0.1:8000/load/'+ tracker_id + '/', function(response) {
 			console.log(response);
 		});
    }
@@ -22,7 +28,7 @@ document.onreadystatechange = function () {
 
 window.onclick = function() {
     Client = new HttpClient();
-	Client.get('http://127.0.0.1:8000/click/1/', function(response) {
+	Client.get('http://127.0.0.1:8000/click/' + tracker_id + '/', function(response) {
 		console.log(response);
 	});
 }
