@@ -1,8 +1,12 @@
 from django.conf.urls import include, url
 from django.contrib import admin
+
 from rest_framework import routers
+
 from logger import views as logger_views
 from authentication import views as authentication_views
+from tracker.views import IndexView
+
 
 router = routers.DefaultRouter()
 router.register(r'users', authentication_views.UserViewSet)
@@ -28,5 +32,6 @@ urlpatterns = [
     url(r'^user/$', logger_views.UserIdSessionIdView.as_view(),
         name="user-id"),
     url(r'^clear/$', logger_views.ClearSessionView.as_view(), name="clear"),
+    url('^.*$', IndexView.as_view(), name='index'),
 
 ]
