@@ -21,13 +21,17 @@
       controllerAs: 'vm',
       templateUrl: '/static/templates/authentication/login.html'
     }).when('/trackers', {
-      controller: 'TrackerController',
+      controller: 'TrackersListController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/logger/trackers.html'
     }).when('/tracker/add', {
       controller: 'NewTrackerController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/logger/new-tracker.html'
+    }).when('/tracker/+:tracker_id', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/tracker.html'
     }).otherwise('/');
   }
 })();
