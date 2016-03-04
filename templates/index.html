@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html ng-app="tracker">
+<head>
+  	<base href="/" />
+	{% include "stylesheets.html" %}
+</head>
+<body>
+		{% include "components/navbar.html" %}
+	  <div class="container-fluid">
+	    <div class="row">
+	      <div class="col-xs-12 ng-view"></div>
+	    </div>
+	  </div>
+	{% include "javascripts.html" %}
+</body>
+</html>
