@@ -5,7 +5,9 @@
     .module('tracker', [
       'tracker.config',
       'tracker.routes',
-      'tracker.authentication'
+      'tracker.authentication',
+      'tracker.layout',
+      'ngMessages'
     ]);
 
   angular
