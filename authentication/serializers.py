@@ -10,7 +10,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         view_name='user-detail',
         lookup_field='username'
     )
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=True)
 
     email = serializers.EmailField(
         required=True,
