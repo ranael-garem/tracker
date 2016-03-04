@@ -20,6 +20,10 @@
       controller: 'LoginController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/authentication/login.html'
+    }).when('/trackers', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/trackers.html'
     }).otherwise('/');
   }
 })();
