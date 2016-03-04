@@ -18,8 +18,7 @@
 
     return Authentication;
 
-  function register(email, password, username) {
-    alert(email);
+  function register(username, email, password) {
     return $http.post('/api/users/', {
       username: username,
       password: password,
