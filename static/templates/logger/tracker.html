@@ -1,0 +1,34 @@
+	<style type="text/css">
+		.btn-xl {
+		    padding: 18px 28px;
+		    font-size: 22px;
+		    border-radius: 8px;
+		}
+	</style>
+	<div ng-show="vm.tracker">
+	<div class="page-header text-center">
+  		<h1>{{vm.tracker['title']}}</h1>
+	</div>
+
+    <div id="products" class="row list-group"  style="padding-left: 100px; padding-right: 100px" ng-show="vm.tracker">
+        <div class="item  list-group-item col-xs-4 col-lg-4">
+            <div class="thumbnail">
+                <div class="caption" style="padding: 20px;">
+                    <code class="row group inner list-group-item-text">
+                        {{ vm.tracker['snippet'] }}</code>
+                </div>
+            </div>
+        </div>
+
+    </div> 
+        <div class="row  col-md-4 "></div>
+
+    <div class="row  col-md-4" style="padding-left;">
+    	<a href="/tracker/add" class="btn btn-warning btn-xl " style="margin-right: 30px; margin-left: 90px;" role="button">Update</a>
+    
+         <a href="/tracker/add" class="btn btn-danger btn-xl" style="margin-left: 10px;" role="button">Delete</a>
+
+    </div>
+            <div class="row  col-md-4 "></div>
+
+	</div>
