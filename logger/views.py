@@ -1,13 +1,12 @@
 import datetime
 from django.utils import timezone
 from django.db.models import Count, Sum
-from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import (
-    UserSerializer, TrackerSerializer, TrackedUserSerializer)
+    TrackerSerializer, TrackedUserSerializer)
 from . import permissions
 from .models import (
     MouseClick, PageLoad, Tracker,
@@ -25,15 +24,6 @@ class APIRoot(APIView):
             'current_user_id': reverse('user-id', request=request),
 
         })
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = permissions.IsCurrentUser,
 
 
 class TrackedUserViewSet(viewsets.ModelViewSet):
