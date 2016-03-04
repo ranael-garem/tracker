@@ -17,7 +17,16 @@
     vm.register = register;
 
     function register() {
-      Authentication.register(vm.username, vm.reg_email, vm.password);
+      var promise = Authentication.register(vm.username, vm.reg_email, vm.password);
+
+      promise.then(
+
+        function(data){
+          vm.msg = data;
+        },
+        function(error){
+          vm.msg = error
+        })
     }
   }
 })();

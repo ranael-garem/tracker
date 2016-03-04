@@ -7,9 +7,7 @@
 
   LoginController.$inject = ['$location', '$scope', 'Authentication'];
 
-  /**
-  * @namespace LoginController
-  */
+
   function LoginController($location, $scope, Authentication) {
     var vm = this;
 
@@ -31,15 +29,12 @@
       var promise = Authentication.login(vm.login_email, vm.password);
 
       promise.then(
-        // OnSuccess function
-        function(answer) {
-          vm.msg = answer;
-          vm.error = true;
+        function(data) {
+          vm.msg = data;
         },
-        // OnFailure function
+
         function(error) {
           vm.msg = error;
-          vm.error = true;
         }
       )
 
