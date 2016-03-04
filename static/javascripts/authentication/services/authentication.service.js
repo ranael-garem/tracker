@@ -32,7 +32,7 @@
     }
 
     function regError(data, status, headers, config) {
-      console.error(data);
+      return data['data']
     }
   }
 
