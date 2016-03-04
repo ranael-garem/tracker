@@ -1,6 +1,3 @@
-/**
-* Register controller
-*/
 (function () {
   'use strict';
 
