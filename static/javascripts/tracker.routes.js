@@ -32,6 +32,10 @@
       controller: 'TrackerController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/logger/tracker.html'
-    }).otherwise('/');
-  }
+    }).when('/tracker/+:tracker_id/update', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/tracker-update.html'
+    }).otherwise('/');};
+  
 })();
