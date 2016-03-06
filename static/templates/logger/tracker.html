@@ -24,9 +24,9 @@
         <div class="row  col-md-4 "></div>
 
     <div class="row  col-md-4" style="padding-left;">
-    	<a href="/tracker/add" class="btn btn-warning btn-xl " style="margin-right: 30px; margin-left: 90px;" role="button">Update</a>
+    	<a href="/tracker/{{vm.tracker.id}}/update" class="btn btn-warning btn-xl " style="margin-right: 30px; margin-left: 90px;" role="button">Update</a>
     
-         <a href="/tracker/add" class="btn btn-danger btn-xl" style="margin-left: 10px;" role="button">Delete</a>
+         <a href="#" class="btn btn-danger btn-xl" style="margin-left: 10px;" ng-click="vm.destroy()" onclick="javascript:return confirm('Are you absolutely sure you want to delete?')" role="button">Delete</a>
 
     </div>
             <div class="row  col-md-4 "></div>
