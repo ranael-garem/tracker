@@ -16,6 +16,8 @@
       get: get,
       update: update,
       destroy: destroy,
+      popularity: popularity,
+      interactivity: interactivity,
 
     };
 
@@ -62,6 +64,33 @@
 
     function update(tracker) {
       return $http.put('/api/trackers/' + tracker.id + '/', tracker);
+    }
+
+
+    function popularity(tracker_id) {
+      return $http.get('/popularity/' + tracker_id + '/').then(successFn, errorFn);
+
+
+      function successFn(data, status, headers, config) {
+        return data.data;
+      }
+
+      function errorFn(data, status, headers, config) {
+        return data.data;
+      }
+    }
+
+    function interactivity(tracker_id) {
+      return $http.get('/interactivity/' + tracker_id + '/').then(successFn, errorFn);
+
+
+      function successFn(data, status, headers, config) {
+        return data.data;
+      }
+
+      function errorFn(data, status, headers, config) {
+        return data.data;
+      }
     }
 
   }
