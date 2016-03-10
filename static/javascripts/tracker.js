@@ -7,6 +7,7 @@
       'tracker.routes',
       'tracker.authentication',
       'tracker.layout',
+      'tracker.logger',
       'ngMessages'
     ]);
 

@@ -36,4 +36,4 @@ class TrackerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Tracker
-        fields = ('url', 'title', 'snippet', 'sessions')
+        fields = ('url', 'id', 'title', 'snippet', 'sessions')

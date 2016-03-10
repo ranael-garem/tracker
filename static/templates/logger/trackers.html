@@ -1,0 +1,34 @@
+	<style type="text/css">
+		.btn-xl {
+		    padding: 18px 28px;
+		    font-size: 22px;
+		    border-radius: 8px;
+		}
+	</style>
+	<div>
+	<div class="page-header text-center">
+  		<h1>Your Trackers</h1>
+	</div>
+
+    <div id="products" class="row list-group"  style="padding-left: 100px; padding-right: 100px" ng-repeat="tracker in vm.trackers">
+        <div class="item  list-group-item col-xs-4 col-lg-4">
+            <div class="thumbnail">
+                <div class="caption" style="padding: 20px;">
+                    <h4 class="group inner list-group-item-heading">
+                        {{ tracker['title'] }}</h4>
+                    <code class="row group inner list-group-item-text">
+                        {{ tracker['snippet'] }}</code>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                            <a class="btn btn-success" href="/tracker/{{tracker['id']}}"> View Tracker</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>       
+    <div class="row  col-md-8 col-md-offset-2">
+    	<a href="/tracker/add" class="btn btn-danger btn-xl btn-block" role="button">Add Another Tracker</a>
+    </div>
+	</div>
