@@ -13,14 +13,32 @@
     vm.tracker = undefined;
     vm.update = update;
     vm.destroy = destroy;
+    vm.popularity = undefined;
+    vm.interactivity = undefined
     activate();
-    
+    popularity();
+    interactivity();
+
     function activate() {
       var tracker_id = $routeParams.tracker_id;
       Trackers.get(tracker_id).then(successFn, errorFn);
 
       function successFn(data, status, headers, config) {
         vm.tracker = data;
+      }
+
+      function errorFn(data, status, headers, config) {
+        console.error(data.error);
+      }
+
+    }
+
+    function popularity() {
+      var tracker_id = $routeParams.tracker_id;
+      Trackers.popularity(tracker_id).then(successFn, errorFn);
+
+      function successFn(data, status, headers, config) {
+        vm.popularity = data;
         console.log(data);
       }
 
@@ -30,6 +48,20 @@
 
     }
 
+    function interactivity() {
+      var tracker_id = $routeParams.tracker_id;
+      Trackers.interactivity(tracker_id).then(successFn, errorFn);
+
+      function successFn(data, status, headers, config) {
+        vm.interactivity = data;
+        console.log(data);
+      }
+
+      function errorFn(data, status, headers, config) {
+        console.error(data.error);
+      }
+
+    }
 
     function update() {
       Trackers.update(vm.tracker).then(successFn, errorFn);
