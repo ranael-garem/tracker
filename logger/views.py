@@ -171,6 +171,10 @@ class ClearSessionView(APIView):
             del request.session['user_id']
         except KeyError:
             pass
+        try:
+            del request.session['session_id']
+        except KeyError:
+            pass
         return Response("SESSION CLEARED")
 
 
@@ -196,11 +200,19 @@ class PopularityView(APIView):
         else:
             from_to = None
 
+        users = TrackedUser.objects.filter(tracker=pk).count()
+        today_users = TrackedUser.objects.filter(tracker=pk,
+            created_at__gte=datetime.datetime.now().date()).count()
+        visits = Session.objects.filter(tracker=pk).count()
+
         return Response({
             'in_last_day': in_the_last_day,
             'in_last_week': in_the_last_week,
             'in_last_month': in_the_last_month,
-            'popularity_increase_from_to': from_to
+            'popularity_increase_from_to': from_to,
+            'users': users,
+            'today_users': today_users,
+            'visits': visits,
 
         })
 
@@ -278,7 +290,8 @@ class InteractivityView(APIView):
         mouse_clicks = Session.objects.filter(tracker_id=tracker_id).annotate(
             clicks=Count('mouse_clicks')).aggregate(
             Sum('clicks'))['clicks__sum']
-        avg_clicks = float(page_loads) / float(mouse_clicks)
+
+        avg_clicks = round(float(mouse_clicks) / float(page_loads), 2)
 
         sessions = Tracker.objects.get(id=tracker_id).sessions.values('id')
         today_loads = PageLoad.objects.filter(
@@ -288,7 +301,7 @@ class InteractivityView(APIView):
             session__in=sessions,
             created_at__gte=datetime.datetime.now().date()).count()
         if today_loads != 0:
-            avg_today = float(today_clicks) / float(today_loads)
+            avg_today = round(float(today_clicks) / float(today_loads), 2)
         else:
             avg_today = None
 

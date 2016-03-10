@@ -20,6 +20,7 @@
       <ul class="nav navbar-nav navbar-right">
       {% if user.is_authenticated %}
                 <li><a href="/">{{ user.username }}</a></li>
+                <li><a href="/trackers">trackers</a></li>
                 <li><a href="" ng-click="controller.logout()">logout</a></li>
       {% else %}                
         <li><a href="/login">Login</a></li>

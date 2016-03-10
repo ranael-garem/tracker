@@ -20,6 +20,22 @@
       controller: 'LoginController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/authentication/login.html'
-    }).otherwise('/');
-  }
+    }).when('/trackers', {
+      controller: 'TrackersListController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/trackers.html'
+    }).when('/tracker/add', {
+      controller: 'NewTrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/new-tracker.html'
+    }).when('/tracker/+:tracker_id', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/tracker.html'
+    }).when('/tracker/+:tracker_id/update', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/tracker-update.html'
+    }).otherwise('/');};
+  
 })();

@@ -1,0 +1,23 @@
+    <style type="text/css">
+    .btn-xl {
+        padding: 18px 28px;
+        font-size: 22px;
+        border-radius: 8px;
+    }
+  </style><div class="page-header text-center">
+      <h1>Add a New Tracker</h1>
+  </div>
+  <div class="container panel panel-default" style="padding-left: 300px; padding-right: 300px; padding-top:50px;">
+    <form role="form" ng-submit="vm.create()">
+      <div class="form-group">
+        <input type="text" class="form-control" style="height: 60px; font-size: 18px;"id="title" name="title" placeholder="Tracker Name"ng-model="vm.title">
+        </input>
+      </div>
+
+      <div class="form-group row  col-md-12 col-md-offset-4">
+        <button type="submit" class="btn btn-danger btn-xl">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
