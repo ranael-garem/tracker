@@ -9,7 +9,118 @@
 	<div class="page-header text-center">
   		<h1>{{vm.tracker['title']}}</h1>
 	</div>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-users"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.popularity.users }}</var>
+                        <label class="text-muted">All Time Users</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-user-plus"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.popularity.today_users }}</var>
+                        <label class="text-muted">New Users</label>
+                    </div>
 
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-bookmark-o"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.popularity.visits }}</var>
+                        <label class="text-muted">Visits</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row page-header text-center">
+            <h1>Popularity</h1>
+         </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-line-chart"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.popularity.in_last_day }}</var>
+                        <label class="text-muted">Last Day</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-line-chart"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.popularity.in_last_week }}</var>
+                        <label class="text-muted">Last Week</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-line-chart"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.popularity.in_last_month }}</var>
+                        <label class="text-muted">Last Month</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row page-header text-center">
+            <h1>Interactivity</h1>
+         </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-mouse-pointer"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.interactivity.avg_today }}</var>
+                        <label class="text-muted"> Today</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="hero-widget well well-sm">
+                    <div class="icon">
+                         <i class="fa fa-mouse-pointer"></i>
+                    </div>
+                    <div class="text">
+                        <var>{{ vm.interactivity.avg_clicks }}</var>
+                        <label class="text-muted">Average</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="products" class="row list-group"  style="padding-left: 100px; padding-right: 100px" ng-show="vm.tracker">
         <div class="item  list-group-item col-xs-4 col-lg-4">
             <div class="thumbnail">
