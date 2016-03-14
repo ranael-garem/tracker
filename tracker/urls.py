@@ -39,6 +39,12 @@ urlpatterns = [
     url(r'^visits/(?P<pk>[0-9]+)/(?P<FY>\d{4})/(?P<FM>\d+)/(?P<FD>\d+)/(?P<TY>\d{4})/(?P<TM>\d+)/(?P<TD>\d+)/$',
         logger_views.VisitsOverTime.as_view()),
 
+
+    url(r'^new-users/(?P<pk>[0-9]+)/$',
+        logger_views.NewUsersView.as_view()),
+    url(r'^new-users/(?P<pk>[0-9]+)/(?P<FY>\d{4})/(?P<FM>\d+)/(?P<FD>\d+)/(?P<TY>\d{4})/(?P<TM>\d+)/(?P<TD>\d+)/$',
+        logger_views.NewUsersView.as_view()),
+
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^api-auth/',
