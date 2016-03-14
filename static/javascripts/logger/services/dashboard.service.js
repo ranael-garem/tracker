@@ -20,7 +20,7 @@
     return Dashboard;
 
     function visits_over_time(tracker_id) {
-      return $http.get('/visits/' + tracker_id + '/').then(successFn, errorFn);
+      return $http.get('/reports/visits/' + tracker_id + '/').then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
@@ -41,7 +41,7 @@
       var from_date_string = from_date.getFullYear() + '/' + (from_date.getMonth() + 1) + '/' + from_date.getDate() + '/';
       var to_date_string = to_date.getFullYear() + '/' + (to_date.getMonth() + 1) + '/' + to_date.getDate() + '/';
 
-      return $http.get('/visits/' + tracker_id + '/' + from_date_string + to_date_string).then(successFn, errorFn);
+      return $http.get('/reports/visits/' + tracker_id + '/' + from_date_string + to_date_string).then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
@@ -55,7 +55,7 @@
 
 
     function new_users(tracker_id) {
-      return $http.get('/new-users/' + tracker_id + '/').then(successFn, errorFn);
+      return $http.get('/reports/new-users/' + tracker_id + '/').then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
@@ -76,7 +76,7 @@
       var from_date_string = from_date.getFullYear() + '/' + (from_date.getMonth() + 1) + '/' + from_date.getDate() + '/';
       var to_date_string = to_date.getFullYear() + '/' + (to_date.getMonth() + 1) + '/' + to_date.getDate() + '/';
 
-      return $http.get('/new-users/' + tracker_id + '/' + from_date_string + to_date_string).then(successFn, errorFn);
+      return $http.get('/reports/new-users/' + tracker_id + '/' + from_date_string + to_date_string).then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
