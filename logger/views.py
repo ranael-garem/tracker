@@ -64,7 +64,7 @@ class PageLoadView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk, path, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
@@ -92,7 +92,8 @@ class PageLoadView(APIView):
                 tracker_id=pk, user_id=user_id)
             request.session['session_id'] = user_session.id
 
-        PageLoad.objects.create(session=user_session, user_id=user_id)
+        PageLoad.objects.create(
+            session=user_session, user_id=user_id, page=path)
 
         return Response({'user_id': request.session['user_id'],
                          'session_id': request.session['session_id']},
@@ -106,7 +107,7 @@ class MouseClickView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk, path, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
@@ -134,7 +135,8 @@ class MouseClickView(APIView):
                 tracker_id=pk, user_id=user_id)
             request.session['session_id'] = user_session.id
 
-        MouseClick.objects.create(session=user_session, user_id=user_id)
+        MouseClick.objects.create(
+            session=user_session, user_id=user_id, page=path)
 
         return Response({'user_id': request.session['user_id'],
                          'session_id': request.session['session_id']},
