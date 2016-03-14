@@ -25,6 +25,11 @@
     vm.new_users_date = moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY');
     vm.new_users_date_change = new_users_date_change;
     
+    vm.bounce_rate_labels = [];
+    vm.bounce_rate_series = ['Series A'];
+    vm.bounce_rate_data = [];
+    vm.bounce_rate_date = moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY');
+    vm.bounce_rate_date_change = bounce_rate_date_change;
     activate();
 
     function activate() {
@@ -41,11 +46,23 @@
         console.log(data.data);
       }
 
-      Dashboard.new_users(tracker_id).then(successFn, errorFn);
+      Dashboard.new_users(tracker_id).then(newUsersSuccessFn, newUsersErrorFn);
 
-      function successFn(data, status, headers, config) {
+      function newUsersSuccessFn(data, status, headers, config) {
         vm.new_users_labels = data.labels;
         vm.new_users_data = [data.values,];
+      }
+
+      function newUsersErrorFn(data, status, headers, config) {
+        console.log(data.data);
+      }
+
+
+      Dashboard.bounce_rate(tracker_id).then(successFn, errorFn);
+
+      function successFn(data, status, headers, config) {
+        vm.bounce_rate_labels = data.labels;
+        vm.bounce_rate_data = [data.values,];
       }
 
       function errorFn(data, status, headers, config) {
@@ -87,5 +104,24 @@
         console.log(data.data);
       }
     }
+
+
+    function bounce_rate_date_change(){
+      var tracker_id = $routeParams.tracker_id;
+      var date = vm.bounce_rate_date.split('-'); 
+      
+      Dashboard.bounce_rate_with_date(tracker_id, date).then(successFn, errorFn);
+
+
+      function successFn(data, status, headers, config) {
+        vm.bounce_rate_labels = data.labels;
+        vm.bounce_rate_data = [data.values,];
+      }
+
+      function errorFn(data, status, headers, config) {
+        console.log(data.data);
+      }
+    }
+
 }
 })();
