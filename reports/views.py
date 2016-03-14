@@ -228,3 +228,58 @@ class NewUsersView(APIView):
             from_date += datetime.timedelta(days=1)
         return Response({"labels": labels,
                          "values": data})
+
+
+class BounceRateView(APIView):
+    """
+    Returns bounce rate for each day in a time interval
+    and total bounce rate
+    """
+
+    def get(self, request, pk,
+            FY=None, FM=None, FD=None,
+            TY=None, TM=None, TD=None, format=None):
+        labels = []
+        data = []
+        all_visits = Session.objects.filter(tracker_id=pk)
+        visits_with_one_page_view = all_visits.annotate(
+            num_pages=Count('page_loads__page',
+                            distinct=True)).filter(num_pages=1).count()
+        if all_visits.count() != 0:
+            avg_bounce_rate = (
+                float(visits_with_one_page_view) /
+                float(all_visits.count())) * 100
+        else:
+            avg_bounce_rate = None
+
+        if FM and FM and FD and TY and TM and TD:
+            from_date = datetime.date(int(FY), int(FM), int(FD))
+            to_date = datetime.date(int(TY), int(TM), int(TD))
+        else:
+            to_date = datetime.datetime.now().date()
+            from_date = to_date - datetime.timedelta(days=15)
+
+        while from_date <= to_date:
+            all_visits = Session.objects.filter(
+                tracker_id=pk,
+                created_at__year=from_date.year,
+                created_at__month=from_date.month,
+                created_at__day=from_date.day
+            )
+            visits_with_one_page_view = all_visits.annotate(
+                num_pages=Count('page_loads__page',
+                                distinct=True)).filter(num_pages=1).count()
+
+            if all_visits.count() != 0:
+                bounce_rate = round((float(visits_with_one_page_view) /
+                                     float(all_visits.count())) * 100, 2)
+            else:
+                bounce_rate = None
+            labels.append(
+                "" + from_date.strftime('%b') + " " + str(from_date.day))
+            data.append(bounce_rate)
+            from_date += datetime.timedelta(days=1)
+
+        return Response({"bounce_rate": avg_bounce_rate,
+                         "labels": labels,
+                         "values": data})
