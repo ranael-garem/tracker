@@ -340,6 +340,7 @@ class VisitsOverTime(APIView):
     """
     Returns number of visits for each day in a time interval
     """
+
     def get(self, request, pk,
             FY=None, FM=None, FD=None,
             TY=None, TM=None, TD=None, format=None):
@@ -358,6 +359,38 @@ class VisitsOverTime(APIView):
                                             created_at__month=from_date.month,
                                             created_at__day=from_date.day
                                             ).count()
+            labels.append(
+                "" + from_date.strftime('%b') + " " + str(from_date.day))
+            data.append(visits)
+            from_date += datetime.timedelta(days=1)
+        return Response({"labels": labels,
+                         "values": data})
+
+
+class NewUsersView(APIView):
+    """
+    Returns number of new users for each day in a time interval
+    """
+
+    def get(self, request, pk,
+            FY=None, FM=None, FD=None,
+            TY=None, TM=None, TD=None, format=None):
+        labels = []
+        data = []
+        if FM and FM and FD and TY and TM and TD:
+            from_date = datetime.date(int(FY), int(FM), int(FD))
+            to_date = datetime.date(int(TY), int(TM), int(TD))
+        else:
+            to_date = datetime.datetime.now().date()
+            from_date = to_date - datetime.timedelta(days=15)
+
+        while from_date <= to_date:
+            visits = TrackedUser.objects.filter(
+                tracker=pk,
+                created_at__year=from_date.year,
+                created_at__month=from_date.month,
+                created_at__day=from_date.day
+            ).count()
             labels.append(
                 "" + from_date.strftime('%b') + " " + str(from_date.day))
             data.append(visits)
