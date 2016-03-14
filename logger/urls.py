@@ -1,11 +1,9 @@
 from django.conf.urls import include, url
-from django.contrib import admin
 
 from rest_framework import routers
 
 from logger import views as logger_views
 from authentication import views as auth_views
-from tracker.views import IndexView
 
 
 router = routers.DefaultRouter()
@@ -21,8 +19,8 @@ urlpatterns = [
     url(r'^api/auth/logout/$', auth_views.LogoutView.as_view(), name='logout'),
 
 
-    url(r'^load/(?P<pk>[0-9]+)/$', logger_views.PageLoadView.as_view()),
-    url(r'^click/(?P<pk>[0-9]+)/$', logger_views.MouseClickView.as_view()),
+    url(r'^load/(?P<pk>[0-9]+)/(?P<path>.*)$', logger_views.PageLoadView.as_view()),
+    url(r'^click/(?P<pk>[0-9]+)/(?P<path>.*)$', logger_views.MouseClickView.as_view()),
 
     url(r'^user/$', logger_views.UserIdSessionIdView.as_view(),
         name="user-id"),
