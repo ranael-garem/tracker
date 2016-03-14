@@ -14,11 +14,37 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+            <div id="visits-range" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
                 <input id="visits-date" ng-model="vm.visits_date" ng-change="vm.visits_date_change()" value="vm.visits_date"></input> <b class="caret"></b>
             </div>
             <canvas id="line" class="chart chart-line" chart-data="vm.visits_data" chart-labels="vm.visits_labels" chart-legend="false" chart-series="vm.visits_series" chart-click="">
+            </canvas>
+        </div>
+    </div>
+</div>
+<!-- END VISITS OVER TIME CHART -->
+<!-- NEW USERS CHART -->
+<div class="col-md-6 col-sm-6 col-xs-6">
+    <div class="x_panel">
+        <div class="x_title">
+            <div class="col-md-6">
+                <h3>New Users</h3>
+            </div>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div id="new-users-range" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                <input id="new-users-date" ng-model="vm.new_users_date" ng-change="vm.new_users_date_change()" value="vm.new_users_date"></input> <b class="caret"></b>
+            </div>
+            <canvas id="line" class="chart chart-line" chart-data="vm.new_users_data" chart-labels="vm.new_users_labels" chart-legend="false" chart-series="vm.new_users_series" chart-click="">
             </canvas>
         </div>
     </div>
@@ -51,10 +77,6 @@
 
   // DATE PICKER SCRIPT //
   $(document).ready(function() {
-
-      var cb = function(start, end, label) {
-          $('#reportrange input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-      }
 
       var optionSet1 = {
           startDate: moment().subtract(15, 'days'),
@@ -94,19 +116,45 @@
               firstDay: 1
           }
       };
-      $('#reportrange input').val(moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-      $('#reportrange').daterangepicker(optionSet1, cb);
-      $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+
+      var cb = function(start, end, label) {
+          $('#visits-range input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      }
+
+      $('#visits-range input').val(moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+      $('#visits-range').daterangepicker(optionSet1, cb);
+      $('#visits-range').on('apply.daterangepicker', function(ev, picker) {
           angular.element(document.getElementById('visits-date')).triggerHandler('change');
       });
       $('#options1').click(function() {
-          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+          $('#visits-range').data('daterangepicker').setOptions(optionSet1, cb);
       });
       $('#options2').click(function() {
-          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+          $('#visits-range').data('daterangepicker').setOptions(optionSet2, cb);
       });
       $('#destroy').click(function() {
-          $('#reportrange').data('daterangepicker').remove();
+          $('#visits-range').data('daterangepicker').remove();
+      });
+
+
+
+      var cb2 = function(start, end, label) {
+          $('#new-users-range input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      }
+
+      $('#new-users-range input').val(moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+      $('#new-users-range').daterangepicker(optionSet1, cb2);
+      $('#new-users-range').on('apply.daterangepicker', function(ev, picker) {
+          angular.element(document.getElementById('new-users-date')).triggerHandler('change');
+      });
+      $('#options1').click(function() {
+          $('#new-users-range').data('daterangepicker').setOptions(optionSet1, cb2);
+      });
+      $('#options2').click(function() {
+          $('#new-users-range').data('daterangepicker').setOptions(optionSet2, cb2);
+      });
+      $('#destroy').click(function() {
+          $('#new-users-range').data('daterangepicker').remove();
       });
   });
 </script>
