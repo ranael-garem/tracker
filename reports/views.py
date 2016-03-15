@@ -246,9 +246,9 @@ class BounceRateView(APIView):
             num_pages=Count('page_loads__page',
                             distinct=True)).filter(num_pages=1).count()
         if all_visits.count() != 0:
-            avg_bounce_rate = (
+            avg_bounce_rate = round((
                 float(visits_with_one_page_view) /
-                float(all_visits.count())) * 100
+                float(all_visits.count())) * 100, 1)
         else:
             avg_bounce_rate = None
 
