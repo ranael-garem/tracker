@@ -19,7 +19,7 @@ class PopularityView(APIView):
             FY=None, FM=None, FD=None,
             TY=None, TM=None, TD=None, format=None):
 
-        [in_the_last_day, in_the_last_week,
+        [in_the_last_day, in_the_last_week, last_week_class,
             in_the_last_month] = self.calculate_popularity(pk)
 
         if FM and FM and FD and TY and TM and TD:
@@ -68,10 +68,20 @@ class PopularityView(APIView):
                              datetime.timedelta(days=30)))).count()
 
         in_the_last_day = percentage_increase(last_day_users, all_users)
-        in_the_last_week = percentage_increase(last_week_users, all_users)
+        last_week_percentage = percentage_increase(last_week_users, all_users)
         in_the_last_month = percentage_increase(last_month_users, all_users)
 
-        return [in_the_last_day, in_the_last_week, in_the_last_month]
+        if int(in_the_last_day[:-1]) < 0:
+            last_week_class = "red"
+            last_week_sort = "desc"
+        else:
+            last_week_class = "green"
+            last_week_sort = "asc"
+
+        in_the_last_week = [
+            last_week_percentage, last_week_class, last_week_sort]
+        return [in_the_last_day, in_the_last_week,
+                last_week_class, in_the_last_month]
 
     def calculate_popularity_from_to(self, tracker_id, from_date, to_date):
         """
