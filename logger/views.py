@@ -83,7 +83,8 @@ class PageLoadView(APIView):
                 request.session['session_id'] = user_session.id
             else:
                 print "UPDATE_EXPIRY_DATE"
-                user_session.expiry_date += datetime.timedelta(minutes=30)
+                user_session.expiry_date = timezone.now(
+                ) + datetime.timedelta(minutes=30)
                 user_session.save()
 
         else:
@@ -126,7 +127,8 @@ class MouseClickView(APIView):
                 request.session['session_id'] = user_session.id
             else:
                 print "UPDATE_EXPIRY_DATE"
-                user_session.expiry_date += datetime.timedelta(minutes=30)
+                user_session.expiry_date = timezone.now(
+                ) + datetime.timedelta(minutes=30)
                 user_session.save()
 
         else:
