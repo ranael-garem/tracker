@@ -1,5 +1,33 @@
+<!-- TOP TILES -->
+<div class="row tile_count" ng-show="vm.popularity">
+  <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
+    <div class="left"></div>
+    <div class="right">
+      <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+      <div class="count">{{ vm.popularity.users }}</div>
+      <span class="count_bottom"><i class="{{ vm.popularity.in_last_week[1] }}"><i class="fa fa-sort-{{vm.popularity.in_last_week[2]}}"></i>{{vm.popularity.in_last_week[0] }} </i> From last Week</span>
+    </div>
+  </div>
+  <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
+    <div class="left"></div>
+    <div class="right">
+      <span class="count_top"><i class="fa fa-clock-o"></i> Total Visits</span>
+      <div class="count">{{ vm.popularity.visits }}</div>
+      <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i></i> From last Week</span>
+    </div>
+  </div>
+  <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
+    <div class="left"></div>
+    <div class="right">
+      <span class="count_top"><i class="fa fa-user"></i> Bounce Rate</span>
+      <div class="count green" ng-show="vm.bounce_rate">{{ vm.bounce_rate }}%</div>
+      <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i></i> From last Week</span>
+    </div>
+  </div>
+</div>
+<!-- /END TOP TILES -->
 <!-- VISITS OVER TIME CHART -->
-<div class="col-md-6 col-sm-6 col-xs-6">
+<div class="col-md-4 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <div class="col-md-6">
@@ -25,7 +53,7 @@
 </div>
 <!-- END VISITS OVER TIME CHART -->
 <!-- NEW USERS CHART -->
-<div class="col-md-6 col-sm-6 col-xs-6">
+<div class="col-md-4 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <div class="col-md-6">
@@ -51,7 +79,7 @@
 </div>
 <!-- END VISITS OVER TIME CHART -->
 <!-- BOUNCE RATE CHART -->
-<div class="col-md-6 col-sm-6 col-xs-6">
+<div class="col-md-4 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
             <div class="col-md-6">
