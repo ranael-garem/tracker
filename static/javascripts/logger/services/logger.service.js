@@ -68,7 +68,7 @@
 
 
     function popularity(tracker_id) {
-      return $http.get('/popularity/' + tracker_id + '/').then(successFn, errorFn);
+      return $http.get('/reports/popularity/' + tracker_id + '/').then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
@@ -81,7 +81,7 @@
     }
 
     function interactivity(tracker_id) {
-      return $http.get('/interactivity/' + tracker_id + '/').then(successFn, errorFn);
+      return $http.get('/reports/interactivity/' + tracker_id + '/').then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
