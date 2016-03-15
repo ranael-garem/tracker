@@ -5,10 +5,10 @@
     .module('tracker.logger.controllers')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['$location', '$routeParams', 'Dashboard'];
+  DashboardController.$inject = ['$location', '$routeParams', 'Dashboard', 'Trackers'];
 
 
-  function DashboardController($location, $routeParams, Dashboard) {
+  function DashboardController($location, $routeParams, Dashboard, Trackers) {
     var vm = this;
 
 
@@ -30,6 +30,9 @@
     vm.bounce_rate_data = [];
     vm.bounce_rate_date = moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY');
     vm.bounce_rate_date_change = bounce_rate_date_change;
+
+    vm.popularity = undefined;
+    vm.bounce_rate = undefined;
     activate();
 
     function activate() {
@@ -61,12 +64,24 @@
       Dashboard.bounce_rate(tracker_id).then(successFn, errorFn);
 
       function successFn(data, status, headers, config) {
+        vm.bounce_rate = data.bounce_rate;
         vm.bounce_rate_labels = data.labels;
         vm.bounce_rate_data = [data.values,];
       }
 
       function errorFn(data, status, headers, config) {
         console.log(data.data);
+      }
+
+      Trackers.popularity(tracker_id).then(popularitySuccessFn, popularityErrorFn);
+
+      function popularitySuccessFn(data, status, headers, config) {
+        vm.popularity = data;
+        console.log(data);
+      }
+
+      function popularityErrorFn(data, status, headers, config) {
+        console.error(data.error);
       }
   }
 
