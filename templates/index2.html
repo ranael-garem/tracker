@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tracker">
+{% load static %}
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WebTracked</title>
+    <base href="/" />
+    <!-- Bootstrap core CSS -->
+    {% include "stylesheets.html" %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.min.css' %}" rel="stylesheet">
+    <!-- Custom styling plus plugins -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/maps/jquery-jvectormap-2.0.3.css' %}" />
+    <link href="{% static 'css/icheck/flat/green.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/floatexamples.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/nprogress.js' %}"></script>
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <!-- SIDE MENU -->
+            {% include "components/sidemenu.html" %}
+            <!-- END SIDE MENU -->
+            <!-- TOP NAVIGATION -->
+            {% include "components/navbar.html" %}
+            <!-- END TOP NAVIGATION -->
+            <!-- PAGE CONTENT -->
+            <div class="right_col" role="main">
+                <div class="row ng-view">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="dashboard_graph">
+                            <div class="row x_title">
+                                <div class="col-md-6">
+                                    <h3>Empty <small>no content</small></h3>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                ...
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <!-- FOOTER CONTENT -->
+                <footer>
+                    <div class="copyright-info">
+                        <p class="pull-right">WebTracked - Copyright © 2016 All rights reserved. </a>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </footer>
+                <!-- END FOOTER CONTENT -->
+            </div>
+            <!-- END PAGE CONTENT -->
+        </div>
+    </div>
+
+    <!-- START SCRIPTS-->
+    {% include "javascripts.html" %}
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- gauge js -->
+    <script type="text/javascript" src="{% static 'js/gauge/gauge.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/gauge/gauge_demo.js' %}"></script>
+    <!-- chart js -->
+    <script src="{% static 'js/chartjs/chart.min.js' %}"></script>
+    <!-- bootstrap progress js -->
+    <script src="{% static 'js/progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <script src="{% static 'js/nicescroll/jquery.nicescroll.min.js' %}"></script>
+    <!-- icheck -->
+    <script src="{% static 'js/icheck/icheck.min.js' %}"></script>
+    <!-- daterangepicker -->
+    <script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- flot js -->
+    <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.pie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.orderBars.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.time.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/date.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.spline.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.stack.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/curvedLines.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.resize.js' %}"></script>
+    <!-- worldmap -->
+    <script type="text/javascript" src="{% static 'js/maps/jquery-jvectormap-2.0.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/maps/gdp-data.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/maps/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/maps/jquery-jvectormap-us-aea-en.js' %}"></script>
+    <!-- pace 
+	<script src="{% static 'js/pace/pace.min.js' %}"></script>-->
+    <script>
+    $(function() {
+        $('#world-map-gdp').vectorMap({
+            map: 'world_mill_en',
+            backgroundColor: 'transparent',
+            zoomOnScroll: false,
+            series: {
+                regions: [{
+                    values: gdpData,
+                    scale: ['#E6F2F0', '#149B7E'],
+                    normalizeFunction: 'polynomial'
+                }]
+            },
+            onRegionTipShow: function(e, el, code) {
+                el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
+            }
+        });
+    });
+    </script>
+    <!-- skycons -->
+    <script src="{% static 'js/skycons/skycons.min.js' %}"></script>
+    <script>
+    var icons = new Skycons({
+            "color": "#73879C"
+        }),
+        list = [
+            "clear-day", "clear-night", "partly-cloudy-day",
+            "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+            "fog"
+        ],
+        i;
+
+    for (i = list.length; i--;)
+        icons.set(list[i], list[i]);
+
+    icons.play();
+    </script>
+    <!-- dashbord linegraph -->
+    <script>
+    var doughnutData = [{
+        value: 30,
+        color: "#455C73"
+    }, {
+        value: 30,
+        color: "#9B59B6"
+    }, {
+        value: 60,
+        color: "#BDC3C7"
+    }, {
+        value: 100,
+        color: "#26B99A"
+    }, {
+        value: 120,
+        color: "#3498DB"
+    }];
+    var myDoughnut = new Chart(document.getElementById("canvas1").getContext("2d")).Doughnut(doughnutData);
+    </script>
+    <!-- /dashbord linegraph -->
+    <script>
+    NProgress.done();
+    </script>
+    <!-- END SCRIPTS -->
+</body>
+
+</html>

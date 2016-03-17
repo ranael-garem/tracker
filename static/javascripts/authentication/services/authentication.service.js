@@ -37,7 +37,7 @@
   }
 
   function login(email, password) {
-    return $http.post('/api/auth/login/', {
+    return $http.post('/auth/login/', {
       email: email, password: password
     }).then(loginSuccess, loginError);
 
@@ -55,7 +55,7 @@
 
 
   function logout() {
-    return $http.post('/api/auth/logout/')
+    return $http.post('/auth/logout/')
         .then(logoutSuccess, logoutError);
 
       function logoutSuccess(data, status, headers, config) {

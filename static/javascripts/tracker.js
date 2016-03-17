@@ -8,7 +8,8 @@
       'tracker.authentication',
       'tracker.layout',
       'tracker.logger',
-      'ngMessages'
+      'ngMessages',
+      'chart.js',
     ]);
 
   angular
