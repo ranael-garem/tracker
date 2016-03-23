@@ -1,15 +1,17 @@
 import datetime
 from django.utils import timezone
+from django.db.models import Count
+
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import (
-    TrackerSerializer, TrackedUserSerializer)
+    TrackerSerializer, TrackedUserSerializer, PageSerializer)
 from . import permissions
 from .models import (
     MouseClick, PageLoad, Tracker,
-    TrackedUser, Session)
+    TrackedUser, Session, Page)
 
 
 class APIRoot(APIView):
@@ -58,6 +60,18 @@ class TrackerViewSet(viewsets.ModelViewSet):
         return serializer.save(user=self.request.user)
 
 
+class TrackerPagesViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PageSerializer
+
+    def get_queryset(self):
+        tracker_id = self.kwargs['pk']
+        pages = Page.objects.filter(tracker_id=tracker_id).annotate(
+            num_loads=Count('page_loads'),
+            num_clicks=Count('mouse_clicks')).filter(
+            num_loads__gt=2, num_clicks__gt=1)
+        return pages
+
+
 class PageLoadView(APIView):
     """
     Creates a PageLoad Object for the current user saved/created in the SESSION
@@ -75,12 +89,16 @@ class PageLoadView(APIView):
         if 'session_id' in request.session:
             user_session = Session.objects.get(
                 id=request.session['session_id'])
+            print "NOW", timezone.now()
+            print "EXP", user_session.expiry_date
             if user_session.expiry_date < timezone.now():
                 print "EXPIRED"
                 del request.session['session_id']
                 user_session = Session.objects.create(
                     tracker_id=pk, user_id=user_id)
+                print "SESSION ID", user_session.id
                 request.session['session_id'] = user_session.id
+                print "IN SESSION", request.session['session_id']
             else:
                 print "UPDATE_EXPIRY_DATE"
                 user_session.expiry_date = timezone.now(
@@ -93,8 +111,10 @@ class PageLoadView(APIView):
                 tracker_id=pk, user_id=user_id)
             request.session['session_id'] = user_session.id
 
+        (page, created) = Page.objects.get_or_create(
+            path_name=path, tracker_id=pk)
         PageLoad.objects.create(
-            session=user_session, user_id=user_id, page=path)
+            session=user_session, user_id=user_id, page=page)
 
         return Response({'user_id': request.session['user_id'],
                          'session_id': request.session['session_id']},
@@ -108,7 +128,7 @@ class MouseClickView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, path, format=None):
+    def get(self, request, pk, x, y, path, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
@@ -137,11 +157,13 @@ class MouseClickView(APIView):
                 tracker_id=pk, user_id=user_id)
             request.session['session_id'] = user_session.id
 
+        (page, created) = Page.objects.get_or_create(
+            path_name=path, tracker_id=pk)
         MouseClick.objects.create(
-            session=user_session, user_id=user_id, page=path)
+            session=user_session, user_id=user_id, page=page, x=x, y=y)
 
         return Response({'user_id': request.session['user_id'],
-                         'session_id': request.session['session_id']},
+                         'session_id': request.session['session_id'], }
                         )
 
 

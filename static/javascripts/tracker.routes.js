@@ -40,6 +40,10 @@
       controller: 'DashboardController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/logger/dashboard.html'
-    }).otherwise('/');};
+    }).when('/heatmaps/+:tracker_id', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/heatmaps.html'
+    }).otherwise('/')};
   
 })();

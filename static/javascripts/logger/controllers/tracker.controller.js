@@ -11,6 +11,7 @@
     var vm = this;
 
     vm.tracker = undefined;
+    vm.tracker_pages = undefined;
     vm.update = update;
     vm.destroy = destroy;
     vm.popularity = undefined;
@@ -31,6 +32,15 @@
         console.error(data.error);
       }
 
+      Trackers.get_pages(tracker_id).then(getPagesSuccessFn, getPagesErrFn);
+      
+      function getPagesSuccessFn(data, status, headers, config) {
+        vm.tracker_pages = data;
+      }
+
+      function getPagesErrFn(data, status, headers, config) {
+        console.error(data.error);
+      }
     }
 
     function popularity() {
