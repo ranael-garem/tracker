@@ -3,7 +3,7 @@ from django.db.models import Count, Sum
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from logger.models import (
-    MouseClick, PageLoad, Tracker,
+    MouseClick, PageLoad, Page, Tracker,
     TrackedUser, Session)
 from .helpers import percentage_increase
 
@@ -293,3 +293,14 @@ class BounceRateView(APIView):
         return Response({"bounce_rate": avg_bounce_rate,
                          "labels": labels,
                          "values": data})
+
+
+class HeatMapView(APIView):
+
+    def get(self, request, pk, path, format=None):
+        sessions = Tracker.objects.get(id=pk).sessions.values('id')
+        (page, created) = Page.objects.get_or_create(
+            path_name=path, tracker_id=pk)
+        clicks = MouseClick.objects.filter(
+            session__in=sessions, page=page).values_list('y', 'x')
+        return Response({"clicks": clicks})
