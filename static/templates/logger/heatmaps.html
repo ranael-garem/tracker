@@ -1,0 +1,18 @@
+	<style type="text/css">
+		.btn-xl {
+		    padding: 18px 28px;
+		    font-size: 22px;
+		    border-radius: 8px;
+		}
+	</style>
+	<div ng-show="vm.tracker">
+	<div class="page-header text-center">
+  		<h1>{{vm.tracker['title']}}</h1>
+	</div>
+    <div class="text-center" ng-repeat="page in vm.tracker_pages">
+        <a href="http://127.0.0.1:8000/{{ page.path_name }}#heatmapx" target="_blank">{{ page.path_name }}</a>
+    </div>
+    <br />
+
+
+	</div>
