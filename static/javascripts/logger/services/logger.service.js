@@ -18,6 +18,7 @@
       destroy: destroy,
       popularity: popularity,
       interactivity: interactivity,
+      get_pages: get_pages,
 
     };
 
@@ -82,6 +83,19 @@
 
     function interactivity(tracker_id) {
       return $http.get('/reports/interactivity/' + tracker_id + '/').then(successFn, errorFn);
+
+
+      function successFn(data, status, headers, config) {
+        return data.data;
+      }
+
+      function errorFn(data, status, headers, config) {
+        return data.data;
+      }
+    }
+
+    function get_pages(tracker_id) {
+      return $http.get('/api/trackers/' + tracker_id + '/pages/').then(successFn, errorFn);
 
 
       function successFn(data, status, headers, config) {
