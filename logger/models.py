@@ -57,6 +57,17 @@ class Session(models.Model):
         return self.mouse_clicks.count()
 
 
+class Page(models.Model):
+    """
+    Represents a page of website being tracked
+    """
+    tracker = models.ForeignKey(Tracker, related_name="pages")
+    path_name = models.CharField(max_length=128, unique=True)
+
+    def __unicode__(self):
+        return self.path_name
+
+
 class PageLoad(models.Model):
     """
     Represents the Loads of a page by a single user
@@ -65,11 +76,12 @@ class PageLoad(models.Model):
     session = models.ForeignKey(Session, related_name="page_loads")
     user_id = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
-    page = models.CharField(max_length=128, blank=True, null=True)
+    page = models.ForeignKey(
+        Page, null=True, blank=True, related_name="page_loads")
 
     def __unicode__(self):
         return "Session: %s \n User_Id: %s \n Created_at: %s, Page: %s" % (
-            self.session, self.user_id, self.created_at, self.page)
+            self.session.id, self.user_id, self.created_at, self.page)
 
 
 class MouseClick(models.Model):
@@ -79,8 +91,11 @@ class MouseClick(models.Model):
     session = models.ForeignKey(Session, related_name="mouse_clicks")
     user_id = models.UUIDField(default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
-    page = models.CharField(max_length=128, blank=True, null=True)
+    page = models.ForeignKey(
+        Page, null=True, blank=True, related_name="mouse_clicks")
+    x = models.IntegerField()
+    y = models.IntegerField()
 
     def __unicode__(self):
-        return "Session: %s \n User_Id: %s \n Created_at: %s, Page: %s" % (
-            self.session, self.user_id, self.created_at, self.page)
+        return "Session: %s \n User_Id: %s \n Created_at: %s" % (
+            self.session, self.user_id, self.created_at)
