@@ -1,29 +1,30 @@
+<input hidden name="tracker_id" id="tracker_id" ng-show="vm.tracker_id" type="text" value="{{vm.tracker_id}}"></input>
 <!-- TOP TILES -->
 <div class="row tile_count" ng-show="vm.popularity">
-  <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
-    <div class="left"></div>
-    <div class="right">
-      <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
-      <div class="count">{{ vm.popularity.users }}</div>
-      <span class="count_bottom"><i class="{{ vm.popularity.in_last_week[1] }}"><i class="fa fa-sort-{{vm.popularity.in_last_week[2]}}"></i>{{vm.popularity.in_last_week[0] }} </i> From last Week</span>
+    <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
+        <div class="left"></div>
+        <div class="right">
+            <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+            <div class="count">{{ vm.popularity.users }}</div>
+            <span class="count_bottom"><i class="{{ vm.popularity.in_last_week[1] }}"><i class="fa fa-sort-{{vm.popularity.in_last_week[2]}}"></i>{{vm.popularity.in_last_week[0] }} </i> From last Week</span>
+        </div>
     </div>
-  </div>
-  <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
-    <div class="left"></div>
-    <div class="right">
-      <span class="count_top"><i class="fa fa-clock-o"></i> Total Visits</span>
-      <div class="count">{{ vm.popularity.visits }}</div>
-      <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i></i> From last Week</span>
+    <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
+        <div class="left"></div>
+        <div class="right">
+            <span class="count_top"><i class="fa fa-clock-o"></i> Total Visits</span>
+            <div class="count">{{ vm.popularity.visits }}</div>
+            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i></i> From last Week</span>
+        </div>
     </div>
-  </div>
-  <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
-    <div class="left"></div>
-    <div class="right">
-      <span class="count_top"><i class="fa fa-user"></i> Bounce Rate</span>
-      <div class="count green" ng-show="vm.bounce_rate">{{ vm.bounce_rate }}%</div>
-      <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i></i> From last Week</span>
+    <div class="animated flipInY col-md-2 col-sm-4 col-xs-4 tile_stats_count">
+        <div class="left"></div>
+        <div class="right">
+            <span class="count_top"><i class="fa fa-user"></i> Bounce Rate</span>
+            <div class="count green" ng-show="vm.bounce_rate">{{ vm.bounce_rate }}%</div>
+            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i></i> From last Week</span>
+        </div>
     </div>
-  </div>
 </div>
 <!-- /END TOP TILES -->
 <!-- VISITS OVER TIME CHART -->
@@ -104,6 +105,101 @@
     </div>
 </div>
 <!-- END BOUNCE RATE CHART -->
+<!-- VISITORS MAP -->
+<div class="">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Visitors Map</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+             <div id="visitors-map-range" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                <input id="visitors-map-date" value=""></input> <b class="caret"></b>
+            </div>
+                <div class="dashboard-widget-content">
+                    <div class="col-md-4 hidden-small">
+                        <h2 class="line_30">125.7k Views from 60 countries</h2>
+                        <table class="countries_list">
+                            <tbody>
+                                <tr>
+                                    <td>United States</td>
+                                    <td class="fs15 fw700 text-right">33%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="world-map-gdp" class="col-md-8 col-sm-12 col-xs-12" style="height:230px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END VISITOR MAP -->
+    <!--<canvas id="scroll-heatmap" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"></canvas>-->
+
+<script>
+  function visitorsMap() {
+      $.ajax({
+        url: '/reports/countries/' + tracker_id + '/',
+        type: "GET",
+        success: function(json) {
+            var dict = {};
+            var x = 0;
+            json = json[0];
+            for (x in json) {
+                var key = json[x].country_code;
+                var value = json[x].visits;
+                dict[key] = value;
+            }
+            $('#world-map-gdp').vectorMap({
+                map: 'world_mill_en',
+                backgroundColor: 'grey',
+                zoomOnScroll: true,
+                series: {
+                    regions: [{
+                        values: dict,
+                        scale: ['#E6F2F0', '#149B7E'],
+                        normalizeFunction: 'polynomial'
+                    }]
+                },
+                onRegionTipShow: function(e, el, code) {
+                  if (dict[code]) {
+                    el.html(el.html() + ' - ' + dict[code] + ' visits');
+                  } else {
+                    el.html(el.html() + ' - No Visit');
+                  }
+                }
+            });
+
+        },
+        error: function(response) {
+            console.log(response);
+        }
+    });
+  };
+  visitorsMap();
+  console.log(window.location.href.split('/'));
+  var href = window.location.href.split('/');
+  var tracker_id = href[href.length - 1];
+  $('#visitors-map-date').change(function() {
+    var date = $('#visitors-map-date').val().split('-');
+    var from_date = new Date(date[0]);
+    var to_date = new Date(date[1]);
+
+    var from_date_string = from_date.getFullYear() + '/' + (from_date.getMonth() + 1) + '/' + from_date.getDate() + '/';
+    var to_date_string = to_date.getFullYear() + '/' + (to_date.getMonth() + 1) + '/' + to_date.getDate() + '/';
+
+  });
+
+</script>
 <script type="text/javascript">
   // Close ibox function
   $('.close-link').click(function() {
@@ -228,6 +324,25 @@
       });
       $('#destroy').click(function() {
           $('#bounce-rate-range').data('daterangepicker').remove();
+      });
+
+      var cb4 = function(start, end, label) {
+          $('#visitors-map-range input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      }
+
+      $('#visitors-map-range input').val(moment().subtract(15, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+      $('#visitors-map-range').daterangepicker(optionSet1, cb4);
+      $('#visitors-map-range').on('apply.daterangepicker', function(ev, picker) {
+          angular.element(document.getElementById('visitors-map-date')).triggerHandler('change');
+      });
+      $('#options1').click(function() {
+          $('#visitors-map-range').data('daterangepicker').setOptions(optionSet1, cb4);
+      });
+      $('#options2').click(function() {
+          $('#visitors-map-range').data('daterangepicker').setOptions(optionSet2, cb4);
+      });
+      $('#destroy').click(function() {
+          $('#visitors-map-range').data('daterangepicker').remove();
       });
   });
 </script>
