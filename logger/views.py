@@ -78,7 +78,8 @@ class PageLoadView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, path, format=None):
+    def get(self, request, pk, height, path, countryName,
+            countryCode, city, regionName, ip, lang, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
@@ -95,7 +96,7 @@ class PageLoadView(APIView):
                 print "EXPIRED"
                 del request.session['session_id']
                 user_session = Session.objects.create(
-                    tracker_id=pk, user_id=user_id)
+                    tracker_id=pk, user_id=user_id, country_code=countryCode)
                 print "SESSION ID", user_session.id
                 request.session['session_id'] = user_session.id
                 print "IN SESSION", request.session['session_id']
@@ -108,13 +109,18 @@ class PageLoadView(APIView):
         else:
             print 'USER', user_id
             user_session = Session.objects.create(
-                tracker_id=pk, user_id=user_id)
+                tracker_id=pk, user_id=user_id, country_code=countryCode)
             request.session['session_id'] = user_session.id
 
         (page, created) = Page.objects.get_or_create(
             path_name=path, tracker_id=pk)
-        PageLoad.objects.create(
+        if page.height != height:
+            page.height = height
+            page.save()
+
+        page_load = PageLoad.objects.create(
             session=user_session, user_id=user_id, page=page)
+        request.session['page_load'] = page_load.id
 
         return Response({'user_id': request.session['user_id'],
                          'session_id': request.session['session_id']},
@@ -165,6 +171,22 @@ class MouseClickView(APIView):
         return Response({'user_id': request.session['user_id'],
                          'session_id': request.session['session_id'], }
                         )
+
+
+class ScrollView(APIView):
+    """
+    Saves the maximum scroll heigth for a page load
+    """
+
+    def get(self, request, scroll, format=None):
+        if request.session['page_load']:
+            page_load = PageLoad.objects.get(
+                id=request.session['page_load'])
+            page_load.scroll_height = scroll
+            page_load.save()
+            return Response(page_load.scroll_height)
+        else:
+            return Response()
 
 
 class UserIdSessionIdView(APIView):
