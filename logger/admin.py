@@ -1,5 +1,5 @@
 from django.contrib import admin
-from logger.models import (Country, PageLoad, MouseClick, Page,
+from logger.models import (PageLoad, MouseClick, Page,
                            Tracker, TrackedUser, Session)
 from reports.models import ScreenShot
 
@@ -22,5 +22,4 @@ admin.site.register(Page, PageAdmin)
 admin.site.register(MouseClick)
 admin.site.register(TrackedUser)
 admin.site.register(Session)
-admin.site.register(Country)
 admin.site.register(ScreenShot)

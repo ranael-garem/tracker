@@ -39,6 +39,7 @@ class Session(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expiry_date = models.DateTimeField(
         default=timezone.now() + datetime.timedelta(minutes=30))
+    country_code = models.CharField(max_length=128, default="Unknown")
 
     def __unicode__(self):
         return "TRACKER: %s, USER: %s, created_at: %s, expiry_date: %s " % (
@@ -63,6 +64,7 @@ class Page(models.Model):
     """
     tracker = models.ForeignKey(Tracker, related_name="pages")
     path_name = models.CharField(max_length=128, unique=True)
+    height = models.IntegerField(default=700)
 
     def __unicode__(self):
         return self.path_name
@@ -78,6 +80,8 @@ class PageLoad(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     page = models.ForeignKey(
         Page, null=True, blank=True, related_name="page_loads")
+
+    scroll_height = models.IntegerField(default=0)
 
     def __unicode__(self):
         return "Session: %s \n User_Id: %s \n Created_at: %s, Page: %s" % (
