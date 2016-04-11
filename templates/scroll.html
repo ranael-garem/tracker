@@ -1,0 +1,56 @@
+{% load static %}
+
+<style type="text/css">
+  body {
+    margin: 0;
+}
+</style>
+<script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
+<script src="{% static "heatmap.js" %}"></script>
+
+<canvas id="target"></canvas>
+
+
+<script type="text/javascript">
+
+  function scrollHeatMap(){
+      var src = '{{ screenshot.image.url }}';
+        $.ajax({
+          url: '/reports/scroll/heights/' + {{tracker_id}} + '/' + '{{pathname}}',
+          type: "GET",
+          success: function(json) {
+              var dict = {};
+              var x = 0;
+              json = json.scroll_heights;
+              positions = [];
+              for (x in json) {
+                  positions.push(json[x]['scroll_height']);
+              }
+              console.log(positions);
+            var positionData = [
+                {
+                  height: 700,
+                  positions: positions
+                }
+              ];
+            new Heatmap(
+              'target',
+              src,
+              positionData
+              ,
+              {
+                screenshotAlpha: 0.6,
+                heatmapAlpha: 0.8,
+                }
+            );
+
+          },
+          error: function(response) {
+              console.log(response);
+          }
+    });
+  };
+
+
+  setTimeout((scrollHeatMap()), 1000);
+</script>
