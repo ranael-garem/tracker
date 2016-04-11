@@ -10,7 +10,9 @@
   		<h1>{{vm.tracker['title']}}</h1>
 	</div>
     <div class="text-center" ng-repeat="page in vm.tracker_pages">
-        <a href="http://127.0.0.1:8000/{{ page.path_name }}#heatmapx" target="_blank">{{ page.path_name }}</a>
+        <a href="http://127.0.0.1:8000/{{ page.path_name }}#heatmapx" target="_blank">{{ page.path_name }}</a><br>
+        <a href="http://127.0.0.1:8000/reports/scroll/heatmap/http://127.0.0.1:8000/{{ page.path_name }}#scroll" target="_blank">Scroll - {{ page.path_name }}</a>
+        <hr>
     </div>
     <br />
 
