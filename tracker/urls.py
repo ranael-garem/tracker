@@ -1,9 +1,11 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from tracker.views import IndexView
-
+from tracker import settings
 
 urlpatterns = [
+    url(r'^media/(?P<path>.*)$',
+        'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^', include('logger.urls')),
 
     url(r'^auth/', include('authentication.urls')),
