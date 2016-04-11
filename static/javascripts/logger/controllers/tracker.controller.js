@@ -49,7 +49,6 @@
 
       function successFn(data, status, headers, config) {
         vm.popularity = data;
-        console.log(data);
       }
 
       function errorFn(data, status, headers, config) {
@@ -64,7 +63,6 @@
 
       function successFn(data, status, headers, config) {
         vm.interactivity = data;
-        console.log(data);
       }
 
       function errorFn(data, status, headers, config) {

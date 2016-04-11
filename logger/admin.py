@@ -1,6 +1,7 @@
 from django.contrib import admin
 from logger.models import (PageLoad, MouseClick, Page,
                            Tracker, TrackedUser, Session)
+from reports.models import ScreenShot
 
 
 class PageLoadInline(admin.TabularInline):
@@ -21,3 +22,4 @@ admin.site.register(Page, PageAdmin)
 admin.site.register(MouseClick)
 admin.site.register(TrackedUser)
 admin.site.register(Session)
+admin.site.register(ScreenShot)

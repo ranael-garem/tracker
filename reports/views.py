@@ -1,11 +1,19 @@
 import datetime
+import re
+from time import time
+
 from django.db.models import Count, Sum
+from django.views.generic import TemplateView
+from django.core.files.base import ContentFile
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
 from logger.models import (
     MouseClick, PageLoad, Page, Tracker,
     TrackedUser, Session)
 from .helpers import percentage_increase
+from reports.models import ScreenShot
 
 
 class PopularityView(APIView):
@@ -296,6 +304,10 @@ class BounceRateView(APIView):
 
 
 class HeatMapView(APIView):
+    """
+    Returns X and Y coordinates of mouseclicks of a given page for
+    a ClickHeatMap
+    """
 
     def get(self, request, pk, path, format=None):
         sessions = Tracker.objects.get(id=pk).sessions.values('id')
@@ -304,3 +316,103 @@ class HeatMapView(APIView):
         clicks = MouseClick.objects.filter(
             session__in=sessions, page=page).values_list('y', 'x')
         return Response({"clicks": clicks})
+
+
+class CountriesView(APIView):
+    """
+    Returns number of visits for each country
+    """
+
+    def get(self, request, pk,
+            FY=None, FM=None, FD=None,
+            TY=None, TM=None, TD=None, format=None):
+        if FM and FM and FD and TY and TM and TD:
+            from_date = datetime.date(int(FY), int(FM), int(FD))
+            to_date = datetime.date(
+                int(TY), int(TM), int(TD) +
+                datetime.timedelta(days=1))
+        else:
+            to_date = datetime.datetime.now().date() + \
+                datetime.timedelta(days=1)
+            from_date = to_date - datetime.timedelta(days=14)
+
+        all_visits = Session.objects.filter(
+            tracker_id=pk,
+            created_at__lte=to_date,
+            created_at__gte=from_date,
+        )
+        return Response({
+            all_visits.values("country_code").annotate(visits=Count("pk"))})
+
+
+class IframeView(TemplateView):
+    """
+    View responsible for rendering an iframe
+    """
+    template_name = "iframe.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(IframeView, self).get_context_data(**kwargs)
+        context['url'] = self.kwargs['url']
+        return context
+
+
+class ScreenShotCreateView(APIView):
+    """
+    View responsible for creating a Screenshot object
+    """
+
+    def post(self, request, format=None):
+        source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
+
+        source = str(source)
+        source = source.replace(" ", "+")
+
+        filename = "screenshot%s.png" % str(time()).replace('.', '_')
+        # imgstr = re.search(r'base64,(.*)', source).group(1)
+        imgstr = source.partition('base64,')[2]
+
+        if len(imgstr) % 4 != 0:  # check if multiple of 4
+            while len(imgstr) % 4 != 0:
+                imgstr = imgstr + "="
+
+        decoded_image = imgstr.decode('base64')
+        screenshot = ScreenShot()
+        screenshot.image = ContentFile(decoded_image, filename)
+        screenshot.save()
+
+        return Response({'screenshot_id': screenshot.id})
+
+
+class ScrollHeatMapCanvasView(TemplateView):
+    """
+    Shows Scroll Heat map using a screenshot
+    """
+    template_name = "scroll.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            ScrollHeatMapCanvasView, self).get_context_data(**kwargs)
+        screenshot = ScreenShot.objects.get(id=self.kwargs['screenshot_id'])
+        context['screenshot'] = screenshot
+        context['tracker_id'] = self.kwargs['pk']
+        context['pathname'] = self.kwargs['path']
+        print context['tracker_id']
+
+        return context
+
+
+class ScrollHeightsView(APIView):
+    """
+    Returns page height and page scroll heights
+    """
+
+    def get(self, request, pk, path, format=None):
+        sessions = Tracker.objects.get(id=pk).sessions.values('id')
+        (page, created) = Page.objects.get_or_create(
+            path_name=path, tracker_id=pk)
+        page_loads = PageLoad.objects.filter(
+            session__in=sessions, page=page).values('scroll_height')
+
+        return Response({'scroll_heights': page_loads,
+                         'page_height': page.height})
