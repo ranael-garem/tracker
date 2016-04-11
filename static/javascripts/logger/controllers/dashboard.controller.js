@@ -10,7 +10,7 @@
 
   function DashboardController($location, $routeParams, Dashboard, Trackers) {
     var vm = this;
-
+    vm.tracker_id = 0;
 
 
     vm.visits_labels = [];
@@ -36,7 +36,7 @@
     activate();
 
     function activate() {
-      var tracker_id = $routeParams.tracker_id;
+      vm.tracker_id = $routeParams.tracker_id;
       
       Dashboard.visits_over_time(tracker_id).then(visitsSuccessFn, visitsErrorFn);
 
@@ -77,7 +77,6 @@
 
       function popularitySuccessFn(data, status, headers, config) {
         vm.popularity = data;
-        console.log(data);
       }
 
       function popularityErrorFn(data, status, headers, config) {
