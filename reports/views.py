@@ -367,12 +367,14 @@ class ScreenShotCreateView(APIView):
 
         source = str(source)
         source = source.replace(" ", "+")
-        if len(source) % 4 != 0:  # check if multiple of 4
-            while len(source) % 4 != 0:
-                source = source + "="
 
         filename = "screenshot%s.png" % str(time()).replace('.', '_')
-        imgstr = re.search(r'base64,(.*)', source).group(1)
+        # imgstr = re.search(r'base64,(.*)', source).group(1)
+        imgstr = source.partition('base64,')[2]
+
+        if len(imgstr) % 4 != 0:  # check if multiple of 4
+            while len(imgstr) % 4 != 0:
+                imgstr = imgstr + "="
 
         decoded_image = imgstr.decode('base64')
         screenshot = ScreenShot()
