@@ -12,6 +12,7 @@ class Tracker(models.Model):
     user = models.ForeignKey(User, related_name="trackers")
     title = models.CharField(max_length=256)
     snippet = models.CharField(max_length=256, default="JS Snippet")
+    url = models.CharField(max_length=256, default="http://127.0.0.1:8000")
 
     def __unicode__(self):
         return self.title
@@ -42,8 +43,7 @@ class Session(models.Model):
     country_code = models.CharField(max_length=128, default="Unknown")
 
     def __unicode__(self):
-        return "TRACKER: %s, USER: %s, created_at: %s, expiry_date: %s " % (
-            self.tracker, self.user_id, self.created_at, self.expiry_date)
+        return str(self.id)
 
     def total_page_loads(self):
         """
@@ -101,5 +101,21 @@ class MouseClick(models.Model):
     y = models.IntegerField()
 
     def __unicode__(self):
-        return "Session: %s \n User_Id: %s \n Created_at: %s" % (
-            self.session, self.user_id, self.created_at)
+        return "Session: %s \n Created_at: %s" % (
+            self.session, self.created_at)
+
+
+class MouseMove(models.Model):
+    """
+    Represents mouse move of a single user on a page
+    """
+    session = models.ForeignKey(Session, related_name="mouse_moves")
+    user_id = models.UUIDField(default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    page = models.ForeignKey(
+        Page, null=True, blank=True, related_name="mouse_moves")
+    coordinates = models.CharField(max_length=1024)
+
+    def __unicode__(self):
+        return "Session: %s \n Created_at: %s" % (
+            self.session, self.created_at)
