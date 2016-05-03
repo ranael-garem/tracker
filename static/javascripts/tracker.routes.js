@@ -44,6 +44,14 @@
       controller: 'TrackerController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/logger/heatmaps.html'
+    }).when('/sessions/+:tracker_id', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/sessions.html'
+    }).when('/session/+:session_id', {
+      controller: 'SessionReplayController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/session-replay.html'
     }).otherwise('/')};
   
 })();
