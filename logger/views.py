@@ -11,7 +11,8 @@ from .serializers import (
 from . import permissions
 from .models import (
     MouseClick, PageLoad, Tracker,
-    TrackedUser, Session, Page)
+    TrackedUser, Session, Page,
+    MouseMove)
 
 
 class APIRoot(APIView):
@@ -55,9 +56,21 @@ class TrackerViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """
-        Assigns current user to Tracker instance
+        Assigns current user to Tracker instance and
+        auto generates tracking snippet
         """
-        return serializer.save(user=self.request.user)
+        instance = serializer.save(user=self.request.user)
+        instance.snippet = "<script> \n (function(t, r, a, c, k){" + \
+            "c = t.createElement(r), \n" + \
+            "k = t.getElementsByTagName(r)[0]; \n" + \
+            "c.async = 1; \n" + "c.src = a; \n" + \
+            "k.parentNode.insertBefore(c, k) \n" + \
+            "})(document, 'script'," + \
+            "'http://127.0.0.1:8000/" + \
+            "static/javascripts/transmitter.js?tracker=" + \
+            str(instance.pk) + "'); \n" + "</script>"
+        instance.save()
+        return instance
 
 
 class TrackerPagesViewSet(viewsets.ReadOnlyModelViewSet):
@@ -84,7 +97,8 @@ class PageLoadView(APIView):
             user_id = request.session['user_id']
         else:
             user_id = TrackedUserSerializer(
-                TrackedUser.objects.create(tracker_id=pk)).data['id']
+                TrackedUser.objects.create(tracker_id=pk),
+                context={'request': request}).data['id']
             request.session['user_id'] = user_id
 
         if 'session_id' in request.session:
@@ -167,6 +181,49 @@ class MouseClickView(APIView):
             path_name=path, tracker_id=pk)
         MouseClick.objects.create(
             session=user_session, user_id=user_id, page=page, x=x, y=y)
+
+        return Response({'user_id': request.session['user_id'],
+                         'session_id': request.session['session_id'], }
+                        )
+
+
+class MouseMoveView(APIView):
+    def post(self, request, pk, path, format=None):
+        if 'user_id' in request.session:
+            user_id = request.session['user_id']
+        else:
+            user_id = TrackedUserSerializer(
+                TrackedUser.objects.create(tracker_id=pk)).data['id']
+            request.session['user_id'] = user_id
+
+        if 'session_id' in request.session:
+            user_session = Session.objects.get(
+                id=request.session['session_id'])
+            if user_session.expiry_date < timezone.now():
+                print "EXPIRED"
+                del request.session['session_id']
+                user_session = Session.objects.create(
+                    tracker_id=pk, user_id=user_id)
+                request.session['session_id'] = user_session.id
+            else:
+                print "UPDATE_EXPIRY_DATE"
+                user_session.expiry_date = timezone.now(
+                ) + datetime.timedelta(minutes=30)
+                user_session.save()
+
+        else:
+            print 'USER', user_id
+            user_session = Session.objects.create(
+                tracker_id=pk, user_id=user_id)
+            request.session['session_id'] = user_session.id
+
+        (page, created) = Page.objects.get_or_create(
+            path_name=path, tracker_id=pk)
+        coordinates = request.data['data']
+        MouseMove.objects.create(
+            session=user_session,
+            user_id=user_id, page=page,
+            coordinates=coordinates)
 
         return Response({'user_id': request.session['user_id'],
                          'session_id': request.session['session_id'], }

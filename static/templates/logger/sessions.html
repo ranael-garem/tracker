@@ -1,0 +1,19 @@
+	<style type="text/css">
+		.btn-xl {
+		    padding: 18px 28px;
+		    font-size: 22px;
+		    border-radius: 8px;
+		}
+	</style>
+	<div ng-show="vm.tracker">
+	<div class="page-header text-center">
+  		<h1>{{vm.tracker['title']}}</h1>
+	</div>
+    <div class="text-center" ng-repeat="session in vm.tracker.sessions | limitTo:vm.quantity">
+        <a href="http://127.0.0.1:8000/session/{{session.id}}" target="_blank">{{ session.id }}</a><br>
+        <hr>
+    </div>
+    <br />
+
+
+	</div>

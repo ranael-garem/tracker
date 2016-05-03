@@ -36,6 +36,13 @@
 										{% endfor %}
 									</ul>
 								</li>
+								<li><a><i class="fa fa-edit"></i> Session Replays <span class="fa fa-chevron-down"></span></a>
+									<ul class="nav child_menu" style="display: none">
+										{% for tracker in user.trackers.all  %}
+											<li><a href="/sessions/{{ tracker.id }}">{{ tracker.title }}</a></li>
+										{% endfor %}
+									</ul>
+								</li>
 							</ul>
 						</div>
 					</div>

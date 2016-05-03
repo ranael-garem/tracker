@@ -5,7 +5,7 @@ from . import models
 class TrackedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TrackedUser
-        fields = ('id', 'tracker', 'created_at')
+        fields = ('id', 'tracker', 'created_at', 'url')
 
 
 class SessionSerializer(serializers.ModelSerializer):

@@ -15,7 +15,7 @@
 
     
     function create() {
-      Trackers.create_tracker(vm.title).then(successFn, errorFn);
+      Trackers.create_tracker(vm.title, vm.url).then(successFn, errorFn);
 
       function successFn(data, status, headers, config) {
         vm.msg = data.data;

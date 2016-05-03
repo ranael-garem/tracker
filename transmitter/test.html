@@ -6,7 +6,15 @@
 <body>
     <h1>Test Script</h1>
 
-    <script type="text/javascript" src="transmitter.js"></script>
+    <script>
+	    (function(t, r, a, c, k){
+		  c = t.createElement(r),
+		  k = t.getElementsByTagName(r)[0];
+		  c.async = 1;
+		  c.src = a;
+		  k.parentNode.insertBefore(c, k)
+		})(document, 'script', 'http://127.0.0.1:8000/static/javascripts/transmitter.js?tracker=1');
+	</script>
 </body>
 </html>
 

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from logger.models import (PageLoad, MouseClick, Page,
-                           Tracker, TrackedUser, Session)
+                           Tracker, TrackedUser, Session,
+                           MouseMove)
 from reports.models import ScreenShot
 
 
@@ -23,3 +24,4 @@ admin.site.register(MouseClick)
 admin.site.register(TrackedUser)
 admin.site.register(Session)
 admin.site.register(ScreenShot)
+admin.site.register(MouseMove)

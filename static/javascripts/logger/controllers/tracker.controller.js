@@ -9,7 +9,7 @@
 
   function TrackerController($location, $routeParams, Trackers) {
     var vm = this;
-
+    vm.quantity = -10;
     vm.tracker = undefined;
     vm.tracker_pages = undefined;
     vm.update = update;

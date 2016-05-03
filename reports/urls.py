@@ -49,4 +49,7 @@ urlpatterns = [
 
     url(r'^scroll/heat/map/(?P<screenshot_id>[0-9]+)/(?P<pk>[0-9]+)/(?P<path>.*)$',
         reports_views.ScrollHeatMapCanvasView.as_view()),
+
+    url(r'^session/replay/(?P<pk>[0-9]+)$',
+        reports_views.SessionReplayView.as_view()),
 ]
