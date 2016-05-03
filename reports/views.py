@@ -1,6 +1,6 @@
 import datetime
-import re
 from time import time
+from itertools import chain
 
 from django.db.models import Count, Sum
 from django.views.generic import TemplateView
@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from logger.models import (
     MouseClick, PageLoad, Page, Tracker,
-    TrackedUser, Session)
+    TrackedUser, Session, MouseMove)
 from .helpers import percentage_increase
 from reports.models import ScreenShot
 
@@ -416,3 +416,39 @@ class ScrollHeightsView(APIView):
 
         return Response({'scroll_heights': page_loads,
                          'page_height': page.height})
+
+
+class SessionReplayView(APIView):
+    def get(self, request, pk, format=None):
+        session = [Session.objects.get(id=pk)]
+        first_page_load = PageLoad.objects.filter(
+            session__in=session)[0]
+        first_time = first_page_load.created_at
+
+        all_clicks = MouseClick.objects.filter(
+            session__in=session)
+        mouse_moves = MouseMove.objects.filter(
+            session__in=session)
+
+        result_list = sorted(chain(all_clicks, mouse_moves),
+            key=lambda instance: instance.created_at)
+
+        list = []
+        for object in result_list:
+            time = ((object.created_at - first_time).seconds) * 1000
+            if isinstance(object, MouseMove):
+                list.append(("MouseMove", object.coordinates, object.page.path_name, time))
+            else:
+                list.append(("MouseClick", object.y, object.x, object.page.path_name, time))
+
+        time = []
+        for object in result_list:
+            time.append(((object.created_at - first_time).seconds) * 1000)
+
+        clicks = all_clicks.values_list('y', 'x', 'page__path_name')
+
+        return Response({
+            'clicks': clicks, 'time': time,
+            'height': first_page_load.page.height,
+            'moves': list,
+            'url': session[0].tracker.url})
