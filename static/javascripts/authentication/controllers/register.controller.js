@@ -15,7 +15,12 @@
     var vm = this;
 
     vm.register = register;
-
+    activate();
+    function activate() {
+      if (Authentication.isAuthenticated()) {
+        $location.url('/trackers');
+      }
+    }
     function register() {
       var promise = Authentication.register(vm.username, vm.reg_email, vm.password);
 

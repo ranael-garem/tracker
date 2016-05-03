@@ -14,15 +14,14 @@
     vm.login = login;
 
     vm.error = [];
-    // activate();
+    activate();
 
 
-    // function activate() {
-      // If the user is authenticated, they should not be here.
-      // if (Authentication.isAuthenticated()) {
-        // $location.url('/');
-      // }
-    // }
+    function activate() {
+      if (Authentication.isAuthenticated()) {
+        $location.url('/trackers');
+      }
+    }
 
 
     function login() {
