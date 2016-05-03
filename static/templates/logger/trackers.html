@@ -1,16 +1,15 @@
-	<style type="text/css">
-		.btn-xl {
-		    padding: 18px 28px;
-		    font-size: 22px;
-		    border-radius: 8px;
-		}
-	</style>
-	<div>
-	<div class="page-header text-center">
-  		<h1>Your Trackers</h1>
-	</div>
-
-    <div id="products" class="row list-group"  style="padding-left: 100px; padding-right: 100px" ng-repeat="tracker in vm.trackers">
+<style type="text/css">
+.btn-xl {
+    padding: 18px 28px;
+    font-size: 22px;
+    border-radius: 8px;
+}
+</style>
+<div>
+    <div class="page-header text-center">
+        <h1>Your Trackers</h1>
+    </div>
+    <div id="products" class="row list-group" style="padding-left: 100px; padding-right: 100px" ng-repeat="tracker in vm.trackers">
         <div class="item  list-group-item col-xs-4 col-lg-4">
             <div class="thumbnail">
                 <div class="caption" style="padding: 20px;">
@@ -19,16 +18,24 @@
                     <code class="row group inner list-group-item-text">
                         {{ tracker['snippet'] }}</code>
                     <div class="row">
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-3">
                             <a class="btn btn-success" href="/tracker/{{tracker['id']}}"> View Tracker</a>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <a class="btn btn-primary" href="/dashboard/{{tracker['id']}}"> Dashboard</a>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <a class="btn btn-info" href="/heatmaps/{{tracker['id']}}"> Heat Maps</a>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <a class="btn btn-info" href="/sessions/{{tracker['id']}}"> Session Replays</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-    </div>       
-    <div class="row  col-md-8 col-md-offset-2">
-    	<a href="/tracker/add" class="btn btn-danger btn-xl btn-block" role="button">Add Another Tracker</a>
     </div>
-	</div>
+    <div class="row  col-md-8 col-md-offset-2">
+        <a href="/tracker/add" class="btn btn-danger btn-xl btn-block" role="button">Add Another Tracker</a>
+    </div>
+</div>
