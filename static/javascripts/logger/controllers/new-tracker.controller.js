@@ -18,13 +18,10 @@
       Trackers.create_tracker(vm.title, vm.url).then(successFn, errorFn);
 
       function successFn(data, status, headers, config) {
-        vm.msg = data.data;
-        alert(data.data);
-        console.log(data.data);
+        vm.msg = data;
       }
 
       function errorFn(data, status, headers, config) {
-        console.error(data.error);
         vm.msg = data.error;
       }
 
