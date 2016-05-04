@@ -1,20 +1,104 @@
-	<style type="text/css">
-		.btn-xl {
-		    padding: 18px 28px;
-		    font-size: 22px;
-		    border-radius: 8px;
-		}
-	</style>
-	<div ng-show="vm.tracker">
-	<div class="page-header text-center">
-  		<h1>{{vm.tracker['title']}}</h1>
-	</div>
-    <div class="text-center" ng-repeat="page in vm.tracker_pages">
-        <a href="http://127.0.0.1:8000/{{ page.path_name }}#heatmapx" target="_blank">{{ page.path_name }}</a><br>
-        <a href="http://127.0.0.1:8000/reports/scroll/heatmap/http://127.0.0.1:8000/{{ page.path_name }}#scroll" target="_blank">Scroll - {{ page.path_name }}</a>
-        <hr>
+<style type="text/css">
+.btn-xl {
+    padding: 18px 28px;
+    font-size: 22px;
+    border-radius: 8px;
+}
+</style>
+<div ng-show="vm.tracker">
+    <div class="page-header text-center">
+        <h1>{{vm.tracker['title']}}</h1>
     </div>
-    <br />
+    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Click Heat Maps</a>
+            </li>
+            <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Scroll Heat Maps</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <table id="click-heat-map" class="table table-striped responsive-utilities jambo_table">
+                                <thead>
+                                    <tr class="headings">
+                                        <th>Page Name </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="click-paging"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <table id="scroll-heat-map" class="table table-striped responsive-utilities jambo_table">
+                                <thead>
+                                    <tr class="headings">
+                                        <th>Page Name </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="scroll-paging"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var href = window.location.href.split('/');
+    var tracker_id = href.indexOf('heatmaps');
+    if (tracker_id != -1) {
+        tracker_id = href[tracker_id += 1];
+        var hash = tracker_id.indexOf('#');
+	    if(hash != -1) {
+	    	tracker_id = tracker_id.substring(0, hash);
+	    }
+    }
+    $.ajax({
+        url: "api/trackers/" + tracker_id + "/pages/",
+        type: "GET",
+        success: function(json) {
+        	var x = 0;
+        	if (json.length == 0) {
+        		$('#click-heat-map > tbody:last-child').append('<tr><td> No Heat maps created</td></tr>');
+        		$('#scroll-heat-map > tbody:last-child').append('<tr><td>No Heat maps created</td></tr>');
+        	}
+        	for (x in json) {
+        		$('#click-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/' + json[x]['path_name'] + '#heatmapx" target="_blank">' + json[x]['path_name'] + '</a><br></td></tr>');
+        		$('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/reports/scroll/heatmap/http://127.0.0.1:8000/' + json[x]['path_name'] + '#scroll" target="_blank">' + json[x]['path_name'] +'</a></td></tr>');
+        	}
+        	$('#click-heat-map').datatable({
+			    pageSize: 10,
+			    sort: [true],
+			    filters: [true],
+			    filterText: 'Type to filter... ',
+			    pagingDivSelector: '.click-paging'
+			}) ;
+			$('#scroll-heat-map').datatable({
+			    pageSize: 10,
+			    sort: [true],
+			    filters: [true],
+			    filterText: 'Type to filter... ',
+			    pagingDivSelector: '.scroll-paging'
+			}) ;
+        },
+        error: function(response) {
+            console.log(response);
+        }
+    });
 
-
-	</div>
+</script>
