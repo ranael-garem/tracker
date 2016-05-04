@@ -4,17 +4,23 @@
     font-size: 22px;
     border-radius: 8px;
 }
+.wrap {
+    height: 100%;
+}
 </style>
 <div>
     <div class="page-header text-center">
         <h1>Your Trackers</h1>
     </div>
     <div id="products" class="row list-group" style="padding-left: 100px; padding-right: 100px" ng-repeat="tracker in vm.trackers">
-        <div class="item  list-group-item col-xs-4 col-lg-4">
-            <div class="thumbnail">
+        <div class="item  list-group-item col-xs-4 col-lg-4 wrap">
+            <div class="thumbnail wrap">
                 <div class="caption" style="padding: 20px;">
                     <h4 class="group inner list-group-item-heading">
                         {{ tracker['title'] }}</h4>
+                    <h6 class="group inner list-group-item-heading">
+                        <a href= "{{ tracker['url'] }}">{{ tracker['url'] }}</a></h6>
+                        <p>This is the tracking code. Copy and paste this code into every webpage you want to track<p>
                     <code class="row group inner list-group-item-text">
                         {{ tracker['snippet'] }}</code>
                     <div class="row">
@@ -35,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div class="row  col-md-8 col-md-offset-2">
+    <div style="padding-left: 100px; padding-right: 100px" class="row  col-md-12 col-md-offset-4">
         <a href="/tracker/add" class="btn btn-danger btn-xl btn-block" role="button">Add Another Tracker</a>
     </div>
 </div>
