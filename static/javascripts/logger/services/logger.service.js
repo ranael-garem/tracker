@@ -35,7 +35,8 @@
 
 
       function successFn(data, status, headers, config) {
-        window.location = '/trackers';
+        var tracker_id = data.data['id'];
+        window.location = '/tracker/' + tracker_id + '/';
       }
 
       function errorFn(data, status, headers, config) {
