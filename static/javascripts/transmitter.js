@@ -142,7 +142,7 @@ function mouseClickHeatMap() {
     var body = document.getElementsByTagName("BODY")[0];
 
     $.ajax({
-        url: 'http://127.0.0.1:8000/reports/heatmap/' + pathname + '/tracker_id' + '/' + tracker_id + '/',
+        url: 'http://tracker.juniorgeorgy.webfactional.com/reports/heatmap/' + pathname + '/tracker_id' + '/' + tracker_id + '/',
         dataType: 'jsonp',
         success: function(response) {
             console.log(response);
