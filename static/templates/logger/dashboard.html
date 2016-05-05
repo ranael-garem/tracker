@@ -148,10 +148,9 @@
 <script>
   function visitorsMap() {
       $.ajax({
-        url: 'http://tracker.juniorgeorgy.webfactional.com/reports/countries/' + tracker_id + '/',
+        url: '/reports/countries/' + tracker_id + '/',
         type: "GET",
         success: function(json) {
-            console.log(json);
             var dict = {};
             var x = 0;
             json = json[0];
@@ -186,10 +185,10 @@
         }
     });
   };
-  visitorsMap();
   console.log(window.location.href.split('/'));
   var href = window.location.href.split('/');
   var tracker_id = href[href.length - 1];
+  visitorsMap();
   $('#visitors-map-date').change(function() {
     var date = $('#visitors-map-date').val().split('-');
     var from_date = new Date(date[0]);
