@@ -184,7 +184,7 @@ window.onclick = function(e) {
         y = e.touches[0].pageY;
     }
     Client = new HttpClient();
-    Client.get('http://tracker.juniorgeorgy.webfactional.com/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
+    Client.get('http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
 
     });
 }
