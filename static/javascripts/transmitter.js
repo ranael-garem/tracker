@@ -8,7 +8,7 @@ for (i = 0; i < scripts.length; i++) {
 }
 
 var title = document.title
-var url = window.location.href    
+var url = window.location.href
 var pathname = window.location.pathname
 
 var max_scroll_height = 0;
@@ -111,6 +111,49 @@ function mouseClickHeatMap() {
     });
 }
 
+function heatMapCanvas(clicks, body) {
+    var heatmap = h337.create({
+        container: body,
+        maxOpacity: .6,
+        radius: 20,
+        blur: .90,
+        // backgroundColor with alpha so you can see through it
+        backgroundColor: 'rgba(0, 0, 58, 0)'
+    });
+    var dict = [];
+    var x = 0;
+    for (x in clicks) {
+        dict.push({ x: clicks[x][1], y: clicks[x][0], value: 100 })
+    }
+    var data = {
+        max: 10000,
+        min: 0,
+        data: dict,
+    };
+    heatmap.setData(data);
+    heatmap.repaint();
+    if (window.location.href.indexOf("heatmapxy") == -1) {
+        window.location.hash = window.location.hash + 'y';
+        window.location.reload();
+    }
+}
+
+function mouseClickHeatMap() {
+    var body = document.getElementsByTagName("BODY")[0];
+
+    $.ajax({
+        url: 'http://127.0.0.1:8000/reports/heatmap/' + pathname + '/tracker_id' + '/' + tracker_id + '/',
+        dataType: 'jsonp',
+        success: function(response) {
+            console.log(response);
+            heatMapCanvas(response.clicks, body);
+        },
+        error: function(error) {
+            heatMapCanvas(JSON.parse(error.responseText).clicks, body);
+        }
+    });
+}
+
 function screenShot() {
     setTimeout(function() {
         html2canvas(document.body, {
@@ -153,9 +196,9 @@ document.onreadystatechange = function() {
 
     } else if (document.readyState == "complete") {
         $.ajax({
-             url:"http://ip-api.com/json/?fields=country,countryCode,regionName,city,query",
-             dataType: 'jsonp',
-             success:function(response){
+            url: "http://ip-api.com/json/?fields=country,countryCode,regionName,city,query",
+            dataType: 'jsonp',
+            success: function(response) {
                 var demographics = '/demographics/' + response.country + '/' + response.countryCode + '/' + response.city + '/' + response.regionName + '/' + response.query;
                 var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
                 var img = document.createElement("img");
@@ -164,10 +207,10 @@ document.onreadystatechange = function() {
                 img.height = 1;
                 var html = document.getElementsByTagName("HTML")[0];
                 html.appendChild(img);
-             },
-             error:function(error){
-                 console.log(error);
-             }      
+            },
+            error: function(error) {
+                console.log(error);
+            }
         });
     }
 }
