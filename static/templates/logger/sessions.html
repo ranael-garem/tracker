@@ -1,19 +1,60 @@
-	<style type="text/css">
-		.btn-xl {
-		    padding: 18px 28px;
-		    font-size: 22px;
-		    border-radius: 8px;
-		}
-	</style>
-	<div ng-show="vm.tracker">
-	<div class="page-header text-center">
-  		<h1>{{vm.tracker['title']}}</h1>
-	</div>
-    <div class="text-center" ng-repeat="session in vm.tracker.sessions | limitTo:vm.quantity">
-        <a href="http://127.0.0.1:8000/session/{{session.id}}" target="_blank">{{ session.id }}</a><br>
-        <hr>
+<style type="text/css">
+.btn-xl {
+    padding: 18px 28px;
+    font-size: 22px;
+    border-radius: 8px;
+}
+</style>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <table id="session-replay" class="table table-striped responsive-utilities jambo_table">
+                <thead>
+                    <tr class="headings">
+                        <th>Number </th>
+                        <th>Date </th>
+                        <th>Country </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="click-paging"></div>
+        </div>
     </div>
-    <br />
+</div>
+<script type="text/javascript">
+var href = window.location.href.split('/');
+var session_id = href.indexOf('sessions');
+if (session_id != -1) {
+    session_id = href[session_id += 1];
+    var hash = session_id.indexOf('#');
+    if (hash != -1) {
+        session_id = session_id.substring(0, hash);
+    }
+}
+$.ajax({
+    url: "api/trackers/" + session_id + "/sessions/",
+    type: "GET",
+    success: function(json) {
+        var x = 0;
+        if (json.length == 0) {
+            $('#session-replay > tbody:last-child').append('<tr><td> No Session replays created</td></tr>');
+        }
+        for (x in json) {
+            $('#session-replay > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/session/' + session_id + '" target="_blank">' + json[x]['id'] + '</a></td><td><a href="http://127.0.0.1:8000/session/' + session_id + '" target="_blank">' + json[x]['created_at'] + '</a></td><td><a href="http://127.0.0.1:8000/session/' + session_id + '" target="_blank">' + json[x]['country_name'] + '</a></td></tr>');
+        }
+        $('#session-replay').datatable({
+            pageSize: 15,
+            sort: [true, true, true],
+            filters: [true, true, 'select'],
+            filterText: 'Type to filter... ',
+            pagingDivSelector: '.click-paging'
+        });
 
-
-	</div>
+    },
+    error: function(response) {
+        console.log(response);
+    }
+});
+</script>
