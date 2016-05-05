@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Test</title>
 </head>
+
 <body>
     <h1>Test Script</h1>
-
+    <script   src="https://code.jquery.com/jquery-2.2.1.min.js"   integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="   crossorigin="anonymous"></script>
     <script>
-	    (function(t, r, a, c, k){
-		  c = t.createElement(r),
-		  k = t.getElementsByTagName(r)[0];
-		  c.async = 1;
-		  c.src = a;
-		  k.parentNode.insertBefore(c, k)
-		})(document, 'script', 'http://127.0.0.1:8000/static/javascripts/transmitter.js?tracker=1');
-	</script>
+    (function(t, r, a, c, k) {
+        c = t.createElement(r), k = t.getElementsByTagName(r)[0];
+        c.async = 1;
+        c.src = a;
+        k.parentNode.insertBefore(c, k)
+    })(document, 'script', 'http://tracker.juniorgeorgy.webfactional.com/static/javascripts/transmitter.js?tracker=1');
+    </script>
 </body>
+
 </html>
-
-
