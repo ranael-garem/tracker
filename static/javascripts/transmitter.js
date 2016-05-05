@@ -8,7 +8,7 @@ for (i = 0; i < scripts.length; i++) {
 }
 
 var title = document.title
-var url = window.location.href
+var url = window.location.href    
 var pathname = window.location.pathname
 
 var max_scroll_height = 0;
@@ -139,9 +139,8 @@ function screenShot() {
 function sendMouseMoves() {
     var movesToSend = mouse_moves.slice(1, 10);
     mouse_moves = [];
-    Client.post('http://tracker.juniorgeorgy.webfactional.com/mouse/move/' + tracker_id + '/' + pathname, movesToSend, function(response) {
-
-    });
+    // Client.post('http://tracker.juniorgeorgy.webfactional.com/mouse/move/' + tracker_id + '/' + pathname, movesToSend, function(response) {
+    // });
 }
 
 document.onreadystatechange = function() {
@@ -153,17 +152,27 @@ document.onreadystatechange = function() {
         screenShot();
 
     } else if (document.readyState == "complete") {
-        // screenShot();
-        Client.get('http://ip-api.com/json/?fields=country,countryCode,regionName,city,query', function(response) {
-            // console.log(navigator);
-            var data = JSON.parse(response);
-            var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
-            var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+        $.ajax({
+             url:"http://ip-api.com/json/?fields=country,countryCode,regionName,city,query",
+             dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
+             success:function(json){
+                 alert("Success");
+                 console.log(json);
+             },
+             error:function(){
+                 alert("Error");
+             }      
+        });
+        // Client.get('http://ip-api.com/json/?fields=country,countryCode,regionName,city,query', function(response) {
+        //     // console.log(navigator);
+        //     var data = JSON.parse(response);
+        //     var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
+        //     var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
 
-            Client.get('http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language, function(response) {
-                console.log(response);
-            });
-        })
+        //     Client.get('http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language, function(response) {
+        //         console.log(response);
+        //     });
+        // })
 
 
     }
@@ -185,10 +194,17 @@ window.onclick = function(e) {
         x = e.touches[0].pageX;
         y = e.touches[0].pageY;
     }
-    Client = new HttpClient();
-    Client.get('http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
+    // Client = new HttpClient();
+    // Client.get('http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
 
-    });
+    // });
+    var img = document.createElement("img");
+    img.src = 'http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname;
+    img.width = 1;
+    img.height = 1;
+    var html = document.getElementsByTagName("HTML")[0];
+    html.insertBefore(img, html.firstChild);
+
 }
 
 window.onbeforeunload = function(e) {
