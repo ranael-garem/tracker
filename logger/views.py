@@ -67,7 +67,7 @@ class TrackerViewSet(viewsets.ModelViewSet):
             "c.async = 1; \n" + "c.src = a; \n" + \
             "k.parentNode.insertBefore(c, k) \n" + \
             "})(document, 'script'," + \
-            "'http://127.0.0.1:8000/" + \
+            "'http://tracker.juniorgeorgy.webfactional.com/" + \
             "static/javascripts/transmitter.js?tracker=" + \
             str(instance.pk) + "'); \n" + "</script>"
         instance.save()

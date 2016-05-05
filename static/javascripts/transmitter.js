@@ -1,16 +1,11 @@
 var tracker_id;
 var scripts = document.getElementsByTagName('script');
 for (i = 0; i < scripts.length; i++) {
-    if (scripts[i].src.indexOf('http://127.0.0.1:8000/static/javascripts/transmitter.js') > -1) {
+    if (scripts[i].src.indexOf('http://tracker.juniorgeorgy.webfactional.com/static/javascripts/transmitter.js') > -1) {
         tracker_id = scripts[i].src.replace(/^[^\?]+\??/, '').split('=')[1];
         break;
     }
 }
-// <!-- Remove this when deployed 
-if (tracker_id == undefined){
-    tracker_id = 1;
-}
-//-->
 
 var title = document.title
 var url = window.location.href
@@ -142,7 +137,7 @@ function screenShot() {
 function sendMouseMoves() {
     var movesToSend = mouse_moves.slice(1, 10);
     mouse_moves = [];
-    Client.post('http://127.0.0.1:8000/mouse/move/' + tracker_id + '/' + pathname, movesToSend, function(response) {
+    Client.post('http://tracker.juniorgeorgy.webfactional.com/mouse/move/' + tracker_id + '/' + pathname, movesToSend, function(response) {
 
     });
 }
@@ -163,7 +158,7 @@ document.onreadystatechange = function() {
             var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
             var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
 
-            Client.get('http://127.0.0.1:8000/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language, function(response) {
+            Client.get('http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language, function(response) {
                 console.log(response);
             });
         })
@@ -189,7 +184,7 @@ window.onclick = function(e) {
         y = e.touches[0].pageY;
     }
     Client = new HttpClient();
-    Client.get('http://127.0.0.1:8000/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
+    Client.get('http://tracker.juniorgeorgy.webfactional.com/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
 
     });
 }
