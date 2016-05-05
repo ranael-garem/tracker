@@ -148,7 +148,7 @@
 <script>
   function visitorsMap() {
       $.ajax({
-        url: '/reports/countries/' + tracker_id + '/',
+        url: 'http://tracker.juniorgeorgy.webfactional.com/reports/countries/' + tracker_id + '/',
         type: "GET",
         success: function(json) {
             console.log(json);
