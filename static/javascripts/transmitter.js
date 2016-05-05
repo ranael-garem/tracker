@@ -149,6 +149,8 @@ function mouseClickHeatMap() {
             heatMapCanvas(response.clicks, body);
         },
         error: function(error) {
+            console.log(error);
+            console.log(JSON.parse(error));
             heatMapCanvas(JSON.parse(error.responseText).clicks, body);
         }
     });
