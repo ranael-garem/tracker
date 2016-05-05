@@ -157,8 +157,7 @@ document.onreadystatechange = function() {
              dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
              success:function(response){
                 console.log(response);
-                var data = JSON.parse(response);
-                var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
+                var demographics = '/demographics/' + response.country + '/' + response.countryCode + '/' + response.city + '/' + response.regionName + '/' + response.query;
                 var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
                 var img = document.createElement("img");
                 img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language;
