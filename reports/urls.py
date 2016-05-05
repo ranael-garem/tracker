@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^bounce/(?P<pk>[0-9]+)/(?P<FY>\d{4})/(?P<FM>\d+)/(?P<FD>\d+)/(?P<TY>\d{4})/(?P<TM>\d+)/(?P<TD>\d+)/$',
         reports_views.BounceRateView.as_view()),
 
-    url(r'^heatmap/(?P<pk>[0-9]+)/(?P<path>.*)$',
+    url(r'^heatmap/(?P<path>.*)/tracker_id/(?P<pk>[0-9]+)/$',
         reports_views.HeatMapView.as_view()),
 
 

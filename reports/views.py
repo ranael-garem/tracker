@@ -309,7 +309,7 @@ class HeatMapView(APIView):
     a ClickHeatMap
     """
 
-    def get(self, request, pk, path, format=None):
+    def get(self, request, path, pk, format=None):
         sessions = Tracker.objects.get(id=pk).sessions.values('id')
         (page, created) = Page.objects.get_or_create(
             path_name=path, tracker_id=pk)
