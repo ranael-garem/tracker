@@ -28,9 +28,10 @@
       return $http.get('/api/trackers/');
     }
 
-    function create_tracker(title) {
+    function create_tracker(title, url) {
       return $http.post('/api/trackers/', {
-        title: title
+        title: title,
+        url: url
       }).then(successFn, errorFn);
 
 
