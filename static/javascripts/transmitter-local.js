@@ -188,10 +188,16 @@ window.onclick = function(e) {
         x = e.touches[0].pageX;
         y = e.touches[0].pageY;
     }
-    Client = new HttpClient();
-    Client.get('http://127.0.0.1:8000/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
+    // Client = new HttpClient();
+    // Client.get('http://127.0.0.1:8000/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
 
-    });
+    // });
+    var img = document.createElement("img");
+    img.src = 'http://127.0.0.1:8000/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname;
+    img.width = 1;
+    img.height = 1;
+    var html = document.getElementsByTagName("HTML")[0];
+    html.appendChild(img);
 }
 
 window.onbeforeunload = function(e) {
