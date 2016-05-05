@@ -67,50 +67,6 @@ var HttpClient = function() {
 }
 
 
-function mouseClickHeatMap() {
-    var div = document.createElement('div');
-    div.setAttribute("style", "background-color: white;");
-    var html = document.getElementsByTagName("HTML")[0];
-    var body = document.getElementsByTagName("BODY")[0];
-    // body.setAttribute("id", "heatmapContainer");
-    // div.innerHTML = '<header class="whitebar" style="background: #fff;">';
-    // div.innerHTML += '<div class="row">'
-    // div.innerHTML +=        '<div class="large-10 columns">'
-    // div.innerHTML +=            '<div class="item choosed first"><a href="" class="overview">Overview</a></div>'
-    // div.innerHTML +=            '<div class="item "><a href="/panel/heatmaps" class="heatmaps">Heatmaps</a></div>'
-    // div.innerHTML +=        '</div>'
-    // div.innerHTML +=    '</div>'
-    // div.innerHTML +='</header>';
-    // html.insertBefore(div, html.firstChild);
-    Client.get('http://127.0.0.1:8000/reports/heatmap/' + tracker_id + '/' + pathname, function(response) {
-        var heatmap = h337.create({
-            container: body,
-            maxOpacity: .6,
-            radius: 20,
-            blur: .90,
-            // backgroundColor with alpha so you can see through it
-            backgroundColor: 'rgba(0, 0, 58, 0)'
-        });
-        var clicks = JSON.parse(response).clicks;
-        var dict = [];
-        var x = 0;
-        for (x in clicks) {
-            dict.push({ x: clicks[x][1], y: clicks[x][0], value: 100 })
-        }
-        var data = {
-            max: 10000,
-            min: 0,
-            data: dict,
-        };
-        heatmap.setData(data);
-        heatmap.repaint();
-        if (window.location.href.indexOf("heatmapxy") == -1) {
-            window.location.hash = window.location.hash + 'y';
-            window.location.reload();
-        }
-    });
-}
-
 function heatMapCanvas(clicks, body) {
     var heatmap = h337.create({
         container: body,
@@ -149,8 +105,8 @@ function mouseClickHeatMap() {
             heatMapCanvas(response.clicks, body);
         },
         error: function(error) {
-            console.log(error);
-            console.log(JSON.parse(error));
+            // console.log(error);
+            console.log(JSON.parse(error.responseText));
             heatMapCanvas(JSON.parse(error.responseText).clicks, body);
         }
     });
