@@ -8,9 +8,8 @@
     ]);
 
   angular
-    .module('tracker.authentication.controllers', []);
-
+    .module('tracker.authentication.controllers', ['ngCookies']);
 
   angular
-    .module('tracker.authentication.services', []);
+    .module('tracker.authentication.services', ['ngCookies']);
 })();

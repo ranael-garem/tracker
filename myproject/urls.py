@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-from tracker.views import IndexView
-from tracker import settings
+from myproject.views import IndexView
+from myproject import settings
 
 urlpatterns = [
     url(r'^media/(?P<path>.*)$',
@@ -20,3 +20,8 @@ urlpatterns = [
     url('^.*$', IndexView.as_view(), name='index'),
 
 ]
+
+if settings.DEPLOYED:
+    urlpatterns += [url(r'^static/(?P<path>.*)$',
+                        'django.views.static.serve',
+                        {'document_root': settings.STATIC_ROOT}), ]

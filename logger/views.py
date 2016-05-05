@@ -7,7 +7,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import (
-    TrackerSerializer, TrackedUserSerializer, PageSerializer)
+    TrackerSerializer, TrackedUserSerializer,
+    PageSerializer, SessionSerializer)
 from . import permissions
 from .models import (
     MouseClick, PageLoad, Tracker,
@@ -85,6 +86,15 @@ class TrackerPagesViewSet(viewsets.ReadOnlyModelViewSet):
         return pages
 
 
+class SessionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = SessionSerializer
+
+    def get_queryset(self):
+        tracker_id = self.kwargs['pk']
+        sessions = Session.objects.filter(tracker_id=tracker_id)
+        return sessions
+
+
 class PageLoadView(APIView):
     """
     Creates a PageLoad Object for the current user saved/created in the SESSION
@@ -110,7 +120,8 @@ class PageLoadView(APIView):
                 print "EXPIRED"
                 del request.session['session_id']
                 user_session = Session.objects.create(
-                    tracker_id=pk, user_id=user_id, country_code=countryCode)
+                    tracker_id=pk, user_id=user_id, country_code=countryCode,
+                    country_name=countryName )
                 print "SESSION ID", user_session.id
                 request.session['session_id'] = user_session.id
                 print "IN SESSION", request.session['session_id']
@@ -123,7 +134,8 @@ class PageLoadView(APIView):
         else:
             print 'USER', user_id
             user_session = Session.objects.create(
-                tracker_id=pk, user_id=user_id, country_code=countryCode)
+                tracker_id=pk, user_id=user_id, country_code=countryCode,
+                country_name=countryName)
             request.session['session_id'] = user_session.id
 
         (page, created) = Page.objects.get_or_create(

@@ -1,24 +1,34 @@
-    <style type="text/css">
-    .btn-xl {
-        padding: 18px 28px;
-        font-size: 22px;
-        border-radius: 8px;
-    }
-  </style><div class="page-header text-center">
-      <h1>Add a New Tracker</h1>
-  </div>
-  <div class="container panel panel-default" style="padding-left: 300px; padding-right: 300px; padding-top:50px;">
+<style type="text/css">
+.btn-xl {
+    padding: 18px 28px;
+    font-size: 22px;
+    border-radius: 8px;
+}
+</style>
+<div class="page-header text-center">
+    <h1>Add a New Tracker</h1>
+</div>
+<div class="container panel panel-default" style="padding-left: 300px; padding-right: 300px; padding-top:50px;">
     <form role="form" ng-submit="vm.create()">
-      <div class="form-group">
-        <input type="text" class="form-control" style="height: 60px; font-size: 18px;"id="title" name="title" placeholder="Tracker Name"ng-model="vm.title">
-        <input type="text" class="form-control" style="height: 60px; font-size: 18px;"id="title" name="url" placeholder="Url"ng-model="vm.url">
-        </input>
-      </div>
-
-      <div class="form-group row  col-md-12 col-md-offset-4">
+        <div class="alert alert-danger fade in" ng-cloak ng-show="vm.msg">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> {{ vm.msg }}
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" style="height: 60px; font-size: 18px;" id="title" name="title" placeholder="Tracker Name" ng-model="vm.title">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" style="height: 60px; font-size: 18px;" id="title" name="url" placeholder="www.yourwebsite.com" ng-model="vm.url">
+            </input>
+        </div>
+        <div style="" class="row  col-md-12 col-md-offset-4">
+            <button type="submit" class="btn btn-danger btn-xl btn-block">
+                Submit
+            </button>
+        </div>
+        <!--<div class="form-group  col-md-12 col-md-offset-5">
         <button type="submit" class="btn btn-danger btn-xl">
           Submit
         </button>
-      </div>
+      </div>-->
     </form>
-  </div>
+</div>

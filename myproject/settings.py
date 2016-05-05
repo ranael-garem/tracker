@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-
+import socket
+DEPLOYED = socket.gethostname().endswith('webfaction.com')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,7 +26,9 @@ SECRET_KEY = 'mm31eijo@h6n8d8y#8h_t+812y!j37z(-+3y8ds8r_i)rcrdj1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "tracker.juniorgeorgy.webfactional.com",
+    "www.tracker.juniorgeorgy.webfactional.com"]
 
 
 # Application definition
@@ -55,7 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'tracker.urls'
+ROOT_URLCONF = 'myproject.urls'
 
 # TEMPLATES = [
 #     {
@@ -82,7 +85,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-WSGI_APPLICATION = 'tracker.wsgi.application'
+WSGI_APPLICATION = 'myproject.wsgi.application'
 
 
 # Database
@@ -103,11 +106,11 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -115,7 +118,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
-
+if DEPLOYED:
+    STATIC_ROOT = os.path.join(BASE_DIR, '../../webtracked_static/')
+    MEDIA_ROOT = os.path.join(STATIC_ROOT, "media")
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
