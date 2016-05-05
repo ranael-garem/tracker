@@ -47,6 +47,7 @@ var HttpClient = function() {
 
         HttpRequest.open("GET", Url, true);
         HttpRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+        HttpRequest.setRequestHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         HttpRequest.send(null);
     }
 
