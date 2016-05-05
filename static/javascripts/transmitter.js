@@ -156,11 +156,19 @@ document.onreadystatechange = function() {
              url:"http://ip-api.com/json/?fields=country,countryCode,regionName,city,query",
              dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
              success:function(json){
-                 alert("Success");
-                 console.log(json);
+                console.log(json);
+                var data = JSON.parse(response);
+                var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
+                var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+                var img = document.createElement("img");
+                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language;
+                img.width = 1;
+                img.height = 1;
+                var html = document.getElementsByTagName("HTML")[0];
+                html.insertBefore(img, html.firstChild);
              },
-             error:function(){
-                 alert("Error");
+             error:function(error){
+                 console.log(json);
              }      
         });
         // Client.get('http://ip-api.com/json/?fields=country,countryCode,regionName,city,query', function(response) {
