@@ -151,6 +151,7 @@
         url: '/reports/countries/' + tracker_id + '/',
         type: "GET",
         success: function(json) {
+            console.log(json);
             var dict = {};
             var x = 0;
             json = json[0];
