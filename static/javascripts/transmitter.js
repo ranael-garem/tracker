@@ -155,8 +155,8 @@ document.onreadystatechange = function() {
         $.ajax({
              url:"http://ip-api.com/json/?fields=country,countryCode,regionName,city,query",
              dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
-             success:function(json){
-                console.log(json);
+             success:function(response){
+                console.log(response);
                 var data = JSON.parse(response);
                 var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
                 var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
