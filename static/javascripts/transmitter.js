@@ -191,7 +191,7 @@ function sendMouseMoves() {
 document.onreadystatechange = function() {
     Client = new HttpClient();
     // console.log(document.referrer);
-    if (window.location.href.indexOf("heatmapx") > -1) {
+    if (document.readyState == "complete" && window.location.href.indexOf("heatmapx") > -1) {
         mouseClickHeatMap();
     } else if (document.readyState == "complete" && document.referrer.indexOf("/reports/scroll/heatmap/") > -1) {
         screenShot();
