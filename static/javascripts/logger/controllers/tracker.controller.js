@@ -81,7 +81,8 @@
 
 
       function errorFn(data, status, headers, config) {
-        console.error(data.error);     
+        vm.msg = data.data;
+        console.error(data.data);     
       }
     }
 

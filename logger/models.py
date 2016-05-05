@@ -11,8 +11,8 @@ class Tracker(models.Model):
     """
     user = models.ForeignKey(User, related_name="trackers")
     title = models.CharField(max_length=256)
-    snippet = models.CharField(max_length=256, default="JS Snippet")
-    url = models.URLField(max_length=256, default="http://127.0.0.1:8000")
+    snippet = models.CharField(max_length=256)
+    url = models.URLField(max_length=256)
 
     def __unicode__(self):
         return self.title
