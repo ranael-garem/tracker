@@ -154,9 +154,8 @@ document.onreadystatechange = function() {
     } else if (document.readyState == "complete") {
         $.ajax({
              url:"http://ip-api.com/json/?fields=country,countryCode,regionName,city,query",
-             dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
+             dataType: 'jsonp',
              success:function(response){
-                console.log(response);
                 var demographics = '/demographics/' + response.country + '/' + response.countryCode + '/' + response.city + '/' + response.regionName + '/' + response.query;
                 var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
                 var img = document.createElement("img");
@@ -164,24 +163,12 @@ document.onreadystatechange = function() {
                 img.width = 1;
                 img.height = 1;
                 var html = document.getElementsByTagName("HTML")[0];
-                html.insertBefore(img, html.firstChild);
+                html.appendChild(img);
              },
              error:function(error){
-                 console.log(json);
+                 console.log(error);
              }      
         });
-        // Client.get('http://ip-api.com/json/?fields=country,countryCode,regionName,city,query', function(response) {
-        //     // console.log(navigator);
-        //     var data = JSON.parse(response);
-        //     var demographics = '/demographics/' + data.country + '/' + data.countryCode + '/' + data.city + '/' + data.regionName + '/' + data.query;
-        //     var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
-
-        //     Client.get('http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + demographics + '/' + navigator.language, function(response) {
-        //         console.log(response);
-        //     });
-        // })
-
-
     }
 }
 
@@ -201,10 +188,7 @@ window.onclick = function(e) {
         x = e.touches[0].pageX;
         y = e.touches[0].pageY;
     }
-    // Client = new HttpClient();
-    // Client.get('http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname, function(response) {
 
-    // });
     var img = document.createElement("img");
     img.src = 'http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/' + pathname;
     img.width = 1;
