@@ -309,13 +309,19 @@ class HeatMapView(APIView):
     a ClickHeatMap
     """
 
-    def get(self, request, path, pk, format=None):
-        sessions = Tracker.objects.get(id=pk).sessions.values('id')
-        (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk)
-        clicks = MouseClick.objects.filter(
-            session__in=sessions, page=page).values_list('y', 'x')
-        return Response({"clicks": clicks})
+    def get(self, request, page_id, format=None):
+        try:
+            page = Page.objects.get(id=page_id)
+            tracker = Tracker.objects.get(id=page.tracker_id)
+            sessions = tracker.sessions.values('id')
+            clicks = MouseClick.objects.filter(
+                session__in=sessions, page=page).values_list('y', 'x')
+            return Response({"clicks": clicks,
+                            "url": tracker.url,
+                            "path_name": page.path_name,
+                            "page_height": page.height})
+        except:
+            return Response("Page id is incorrect")
 
 
 class CountriesView(APIView):
