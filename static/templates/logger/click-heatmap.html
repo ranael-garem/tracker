@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Click Heat Map</title>
+    <style type="text/css">
+    body {
+        margin: 0;
+    }
+    </style>
+</head>
+
+<body>
+    <script src="{% static 'bower_components/heatmap.js-amd/build/heatmap.js' %}"></script>
+    <script type="text/javascript">
+    
+    function heatMapCanvas(clicks, body) {
+        var heatmap = h337.create({
+            container: body,
+            maxOpacity: .6,
+            radius: 20,
+            blur: .90,
+            // backgroundColor with alpha so you can see through it
+            backgroundColor: 'rgba(0, 0, 58, 0)'
+        });
+        var dict = [];
+        var x = 0;
+        for (x in clicks) {
+            dict.push({
+                x: clicks[x][1],
+                y: clicks[x][0],
+                value: 100
+            })
+        }
+        var data = {
+            max: 10000,
+            min: 0,
+            data: dict,
+        };
+        heatmap.setData(data);
+        heatmap.repaint();
+        // if (window.location.hash.indexOf("heatmap") == -1) {
+        //     window.location.hash = "heatmap";
+        //     window.location.reload();
+        // }
+    }
+    
+    function iframeLoaded() {
+        setTimeout(function() {
+            var iFrameID = document.getElementById('iframe');
+            if(iFrameID) {
+                iFrameID.height = "";
+                iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+                console.log(iFrameID.height);
+            }
+            
+        }, 1000);
+        var href = window.location.href.split('/');
+        var page_id = href.indexOf('heatmap');
+        if (page_id != -1) {
+            page_id = href[page_id += 1];
+        }
+        $.ajax({
+            url: 'reports/heatmap/' + page_id + '/',
+            type: "GET",
+            success: function(json) {
+                var body = document.getElementsByTagName("BODY")[0];
+                heatMapCanvas(json['clicks'], body);
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });   
+    }
+
+    function heatmap() {
+        var href = window.location.href.split('/');
+        var page_id = href.indexOf('heatmap');
+        if (page_id != -1) {
+            page_id = href[page_id += 1];
+        }
+        height = window.innerHeight;
+        width = window.innerWidth;
+        document.body.innerHTML = '';
+
+        $.ajax({
+            url: 'reports/heatmap/' + page_id + '/',
+            type: "GET",
+            success: function(json) {
+                var iframe = document.createElement('iframe');
+                iframe.id = "iframe";
+                iframe.width = width;
+                iframe.height = height;
+                iframe.src = json['url'] + json['path_name'];
+                document.body.appendChild(iframe);
+                document.getElementById('iframe').setAttribute('onload', "iframeLoaded()");
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    };
+
+    heatmap();
+    </script>
+</body>
+
+</html>
