@@ -78,7 +78,7 @@
         		$('#scroll-heat-map > tbody:last-child').append('<tr><td>No Heat maps created</td></tr>');
         	}
         	for (x in json) {
-        		$('#click-heat-map > tbody:last-child').append('<tr><td><a href="http://ranael-garem.github.io/' + json[x]['path_name'] + '#heatmapx" target="_blank">' + json[x]['path_name'] + '</a><br></td></tr>');
+        		$('#click-heat-map > tbody:last-child').append('<tr><td><a href="http://tracker.juniorgeorgy.webfactional.com/heatmap/'+ json[x]['id'] + '" target="_blank">' + json[x]['path_name'] + '</a><br></td></tr>');
         		$('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/reports/scroll/heatmap/http://127.0.0.1:8000/' + json[x]['path_name'] + '#scroll" target="_blank">' + json[x]['path_name'] +'</a></td></tr>');
         	}
         	$('#click-heat-map').datatable({
