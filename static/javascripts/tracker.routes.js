@@ -48,6 +48,10 @@
       controller: 'TrackerController',
       controllerAs: 'vm',
       templateUrl: '/static/templates/logger/heatmaps.html'
+    }).when('/heatmap/+:page_id', {
+      controller: 'TrackerController',
+      controllerAs: 'vm',
+      templateUrl: '/static/templates/logger/click-heatmap.html'
     }).when('/sessions/+:tracker_id', {
       controller: 'TrackerController',
       controllerAs: 'vm',
