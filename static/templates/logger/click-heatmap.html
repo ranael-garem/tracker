@@ -79,7 +79,6 @@
         if (page_id != -1) {
             page_id = href[page_id += 1];
         }
-        height = window.innerHeight;
         width = window.innerWidth;
         document.body.innerHTML = '';
 
@@ -90,7 +89,7 @@
                 var iframe = document.createElement('iframe');
                 iframe.id = "iframe";
                 iframe.width = width;
-                iframe.height = height;
+                iframe.height = json['page_height'];
                 iframe.src = json['href'];
                 document.body.appendChild(iframe);
                 document.getElementById('iframe').setAttribute('onload', "iframeLoaded()");
