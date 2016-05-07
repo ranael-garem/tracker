@@ -101,7 +101,7 @@ class PageLoadView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, height, path, countryName,
+    def get(self, request, pk, height, path, href, countryName,
             countryCode, city, regionName, ip, lang, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
@@ -139,7 +139,7 @@ class PageLoadView(APIView):
             request.session['session_id'] = user_session.id
 
         (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk)
+            path_name=path, tracker_id=pk, href=href)
         if page.height != height:
             page.height = height
             page.save()
@@ -160,7 +160,7 @@ class MouseClickView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, x, y, path, format=None):
+    def get(self, request, pk, x, y, path, href, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
@@ -190,7 +190,7 @@ class MouseClickView(APIView):
             request.session['session_id'] = user_session.id
 
         (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk)
+            path_name=path, tracker_id=pk, href=href)
         MouseClick.objects.create(
             session=user_session, user_id=user_id, page=page, x=x, y=y)
 
