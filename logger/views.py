@@ -138,6 +138,8 @@ class PageLoadView(APIView):
                 country_name=countryName)
             request.session['session_id'] = user_session.id
 
+        if not href.startswith('http://'):
+            href = href[:6] + '/' + href[6:]
         (page, created) = Page.objects.get_or_create(
             path_name=path, tracker_id=pk, href=href)
         if page.height != height:
@@ -188,6 +190,9 @@ class MouseClickView(APIView):
             user_session = Session.objects.create(
                 tracker_id=pk, user_id=user_id)
             request.session['session_id'] = user_session.id
+
+        if not href.startswith('http://'):
+            href = href[:6] + '/' + href[6:]
 
         (page, created) = Page.objects.get_or_create(
             path_name=path, tracker_id=pk, href=href)
