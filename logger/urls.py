@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^api/trackers/(?P<pk>[0-9]+)/sessions/$',
         logger_views.SessionViewSet.as_view({'get': 'list'})),
 
-    url(r'^load/(?P<pk>[0-9]+)/(?P<height>[0-9]+)/(?P<path>.*)/href/(?P<href>.*)/demographics/(?P<countryName>.*)/(?P<countryCode>.*)/(?P<city>.*)/(?P<regionName>.*)/(?P<ip>.*)/(?P<lang>.*)$',
+    url(r'^load/(?P<pk>[0-9]+)/(?P<height>[0-9]+)/pathname/(?P<path>.*)/href/(?P<href>.*)/demographics/(?P<countryName>.*)/(?P<countryCode>.*)/(?P<city>.*)/(?P<regionName>.*)/(?P<ip>.*)/(?P<lang>.*)$',
         logger_views.PageLoadView.as_view()),
     url(r'^click/(?P<pk>[0-9]+)/(?P<x>[0-9]+)/(?P<y>[0-9]+)/(?P<path>.*)/href/(?P<href>.*)$',
         logger_views.MouseClickView.as_view()),
