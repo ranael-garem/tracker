@@ -318,6 +318,7 @@ class HeatMapView(APIView):
                 session__in=sessions, page=page).values_list('y', 'x')
             return Response({"clicks": clicks,
                             "url": tracker.url,
+                            "href": page.href,
                             "path_name": page.path_name,
                             "page_height": page.height})
         except:
