@@ -158,9 +158,14 @@ document.onreadystatechange = function() {
             dataType: 'jsonp',
             success: function(response) {
                 var demographics = '/demographics/' + response.country + '/' + response.countryCode + '/' + response.city + '/' + response.regionName + '/' + response.query;
-                var _docHeight = (document.height !== undefined) ? document.height : document.body.offsetHeight;
+                var body = document.body,
+                    html = document.documentElement;
+
+                var height = Math.max( body.scrollHeight, body.offsetHeight, 
+                                       html.clientHeight, html.scrollHeight, html.offsetHeight );
+                console.log(height);
                 var img = document.createElement("img");
-                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + _docHeight + '/' + pathname + '/href/' + window.location.href + demographics + '/' + navigator.language;
+                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + height + '/' + pathname + '/href/' + window.location.href + demographics + '/' + navigator.language;
                 img.width = 1;
                 img.height = 1;
                 var html = document.getElementsByTagName("HTML")[0];
