@@ -90,7 +90,8 @@
                 iframe.id = "iframe";
                 iframe.width = width;
                 iframe.height = height;
-                iframe.src = json['url'] + json['path_name'];
+                // iframe.src = json['url'] + json['path_name'];
+                iframe.src = 'http://ranael-garem.github.io/coffeefinder.html'
                 document.body.appendChild(iframe);
                 document.getElementById('iframe').setAttribute('onload', "iframeLoaded()");
             },
