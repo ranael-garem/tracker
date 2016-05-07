@@ -66,6 +66,7 @@ class Page(models.Model):
     tracker = models.ForeignKey(Tracker, related_name="pages")
     path_name = models.CharField(max_length=128, unique=True)
     height = models.IntegerField(default=700)
+    href = models.CharField(max_length=256)
 
     def __unicode__(self):
         return self.path_name
