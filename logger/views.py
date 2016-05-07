@@ -140,6 +140,10 @@ class PageLoadView(APIView):
 
         if not href.startswith('http://'):
             href = href[:6] + '/' + href[6:]
+        if path == 'x':
+            path = '/'
+        else:
+            path = path[1:]
         (page, created) = Page.objects.get_or_create(
             path_name=path, tracker_id=pk, href=href)
         if page.height != height:
