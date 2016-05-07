@@ -165,7 +165,7 @@ document.onreadystatechange = function() {
                                        html.clientHeight, html.scrollHeight, html.offsetHeight );
                 console.log(height);
                 var img = document.createElement("img");
-                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + height  + '/pathname/' + pathname + '/href/x' + window.location.href + demographics + '/' + navigator.language;
+                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + height  + '/pathname/x' + pathname + '/href/' + window.location.href + demographics + '/' + navigator.language;
                 img.width = 1;
                 img.height = 1;
                 var html = document.getElementsByTagName("HTML")[0];
