@@ -79,7 +79,7 @@ function heatMapCanvas(clicks, body) {
     var dict = [];
     var x = 0;
     for (x in clicks) {
-        dict.push({ x: clicks[x][1], y: clicks[x][0], value: 100 })
+        dict.push({ x: clicks[x][1], y: clicks[x][0], value: 200 })
     }
     var data = {
         max: 10000,
