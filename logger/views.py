@@ -101,8 +101,8 @@ class PageLoadView(APIView):
     # TODO: page field
     """
 
-    def get(self, request, pk, height, path, href, countryName,
-            countryCode, city, regionName, ip, lang, format=None):
+    def get(self, request, pk, height, path, countryName,
+            countryCode, city, regionName, ip, lang, href, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
