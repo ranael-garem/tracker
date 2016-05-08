@@ -69,7 +69,7 @@ class Page(models.Model):
     href = models.CharField(max_length=256)
 
     def __unicode__(self):
-        return self.path_name
+        return self.href
 
 
 class PageLoad(models.Model):
@@ -86,7 +86,7 @@ class PageLoad(models.Model):
     scroll_height = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return "Session: %s \n User_Id: %s \n Created_at: %s, Page: %s" % (
+        return "Session: %s \n User_Id: %s \n Created_at: %s, Page:%s" % (
             self.session.id, self.user_id, self.created_at, self.page)
 
 
