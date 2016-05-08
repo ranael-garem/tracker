@@ -126,11 +126,12 @@ function screenShot() {
                 document.body.appendChild(img);
                 // scrollHeatMap();
                 Client = new HttpClient();
-                Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
+                Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
                     var data = JSON.parse(response);
+                    alert(pathname);
                     pathname = pathname.substring(1, pathname.length)
                     tracker_id = String(tracker_id).replace('+', '');
-                    window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
+                    window.location.href = 'http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
                 })
             }
         });
@@ -186,7 +187,13 @@ window.onscroll = function() {
     scroll_height = document.documentElement.scrollTop || document.body.scrollTop;
     if (scroll_height > max_scroll_height) {
         max_scroll_height = scroll_height;
-        // Client.get('http://127.0.0.1:8000/api/scroll/' + max_scroll_height + '/', function(response) {});
+        // Client.get('http://tracker.juniorgeorgy.webfactional.com/' + max_scroll_height + '/', function(response) {});
+        var img = document.createElement("img");
+                img.src = 'http://tracker.juniorgeorgy.webfactional.com/' + max_scroll_height + '/';
+                img.width = 1;
+                img.height = 1;
+                var html = document.getElementsByTagName("HTML")[0];
+                html.appendChild(img);
     }
 }
 
