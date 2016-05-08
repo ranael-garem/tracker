@@ -91,7 +91,8 @@ class SessionViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         tracker_id = self.kwargs['pk']
-        sessions = Session.objects.filter(tracker_id=tracker_id)
+        sessions = Session.objects.filter(
+            tracker_id=tracker_id, page_loads__isnull=False).distinct()
         return sessions
 
 
@@ -121,7 +122,7 @@ class PageLoadView(APIView):
                 del request.session['session_id']
                 user_session = Session.objects.create(
                     tracker_id=pk, user_id=user_id, country_code=countryCode,
-                    country_name=countryName )
+                    country_name=countryName)
                 print "SESSION ID", user_session.id
                 request.session['session_id'] = user_session.id
                 print "IN SESSION", request.session['session_id']

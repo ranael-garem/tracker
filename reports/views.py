@@ -317,10 +317,10 @@ class HeatMapView(APIView):
             clicks = MouseClick.objects.filter(
                 session__in=sessions, page=page).values_list('y', 'x')
             return Response({"clicks": clicks,
-                            "url": tracker.url,
-                            "href": page.href,
-                            "path_name": page.path_name,
-                            "page_height": page.height})
+                             "url": tracker.url,
+                             "href": page.href,
+                             "path_name": page.path_name,
+                             "page_height": page.height})
         except:
             return Response("Page id is incorrect")
 
@@ -438,15 +438,17 @@ class SessionReplayView(APIView):
             session__in=session)
 
         result_list = sorted(chain(all_clicks, mouse_moves),
-            key=lambda instance: instance.created_at)
+                             key=lambda instance: instance.created_at)
 
         list = []
         for object in result_list:
             time = ((object.created_at - first_time).seconds) * 1000
             if isinstance(object, MouseMove):
-                list.append(("MouseMove", object.coordinates, object.page.href, time))
+                list.append(
+                    ("MouseMove", object.coordinates, object.page.href, time))
             else:
-                list.append(("MouseClick", object.y, object.x, object.page.href, time))
+                list.append(
+                    ("MouseClick", object.y, object.x, object.page.href, time))
 
         time = []
         for object in result_list:
