@@ -14,130 +14,171 @@
     <!--<div><iframe id="iframe"style="border: 0; width: 100%; height: 100%" src=""></iframe></div>-->
     <!--<canvas id="myCanvas" style="width: 100%; height: 100%"></canvas>-->
     <script type="text/javascript">
-    function replay(x, y, path_name, url) {
+    function replay(x, y, href) {
         console.log('X: ' + x + ', Y: ' + y);
-        if (document.getElementById('iframe').src != url + path_name) {
-            document.getElementById('iframe').setAttribute('src', url + path_name);
+        if (document.getElementById('iframe').src != href) {
+            document.getElementById('iframe').setAttribute('src', href);
+            setTimeout(console.log('Delay'), 3000);
+        }
+            // document.getElementById('iframe').setAttribute('src', 'http://ranael-garem.github.io');
+
+        //     $('iframe').load(function() {
+        //             var canvas = document.getElementById("myCanvas");
+        //             var ctx = canvas.getContext("2d");
+        //             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //             var imageObj = new Image();
+
+        //             imageObj.onload = function() {
+        //                 ctx.drawImage(imageObj, x, y);
+        //             };
+        //             imageObj.src = 'http://127.0.0.1:8000/static/images/pointer.gif';
+        //             // imageObj.src = 'http://tracker.juniorgeorgy.webfactional.com/static/images/pointer.gif';
+        //         });
+        //     }
+        //     else {
+
+        //         var canvas = document.getElementById("myCanvas");
+        //         var ctx = canvas.getContext("2d");
+        //         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //         var imageObj = new Image();
+
+        //         imageObj.onload = function() {
+        //             ctx.drawImage(imageObj, x, y);
+        //         };
+        //         imageObj.src = 'http://127.0.0.1:8000/static/images/pointer.gif';
+        //         // imageObj.src = 'http://tracker.juniorgeorgy.webfactional.com/static/images/pointer.gif';
+        //     }
+
+            // $('iframe').load(function() {
+                    var canvas = document.getElementById("myCanvas");
+                    var ctx = canvas.getContext("2d");
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    var imageObj = new Image();
+
+                    imageObj.onload = function() {
+                        ctx.drawImage(imageObj, x, y);
+                    };
+                    // imageObj.src = 'http://127.0.0.1:8000/static/images/pointer.gif';
+                    imageObj.src = 'http://tracker.juniorgeorgy.webfactional.com/static/images/pointer.gif';
+                // });
+        }
+    
+
+        var preTime = 0;
+
+        function run(positions) {
+            var coordinates = positions.splice(0, 4) // after splice, positions will be auto updated
+            var nowTime = coordinates[3];
+            // var nowTime = times.splice(0, 1)[0];
+            if (coordinates.length == 4) {
+
+                setTimeout(function() {
+                    replay(coordinates[0], coordinates[1], coordinates[2]);
+                    preTime = nowTime
+                        // continue run next replay
+                    run(positions);
+                }, nowTime - preTime);
+            }
         }
 
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function createCanvasOverlay() {
+            // Create a blank div where we are going to put the canvas into.
+            var canvasContainer = document.createElement('div');
+            // Add the div into the document
+            document.body.appendChild(canvasContainer);
+            canvasContainer.style.position = "absolute";
+            // Set to 100% so that it will have the dimensions of the document
+            canvasContainer.style.left = "0px";
+            canvasContainer.style.top = "0px";
+            canvasContainer.style.width = "100%";
+            canvasContainer.style.height = "100%";
+            // Set to high index so that this is always above everything else
+            // (might need to be increased if you have other element at higher index)
+            canvasContainer.style.zIndex = "1000";
 
-        var imageObj = new Image();
+            // Now we create the canvas
+            myCanvas = document.createElement('canvas');
+            myCanvas.id = "myCanvas";
 
-        imageObj.onload = function() {
-            ctx.drawImage(imageObj, x, y);
-        };
-        // imageObj.src = 'http://127.0.0.1:8000/static/images/pointer.gif';
-        imageObj.src = 'http://tracker.juniorgeorgy.webfactional.com/static/images/pointer.gif';
-
-    }
-
-    var preTime = 0;
-
-    function run(positions, url) {
-        var coordinates = positions.splice(0, 4) // after splice, positions will be auto updated
-        var nowTime = coordinates[3];
-        // var nowTime = times.splice(0, 1)[0];
-        if (coordinates.length == 4) {
-
-            setTimeout(function() {
-                replay(coordinates[0], coordinates[1], coordinates[2], url);
-                preTime = nowTime
-                    // continue run next replay
-                run(positions, url);
-            }, nowTime - preTime);
+            myCanvas.style.width = canvasContainer.scrollWidth + "px";
+            myCanvas.style.height = canvasContainer.scrollHeight + "px";
+            // You must set this otherwise the canvas will be streethed to fit the container
+            myCanvas.width = canvasContainer.scrollWidth;
+            myCanvas.height = canvasContainer.scrollHeight;
+            myCanvas.style.overflow = 'visible';
+            // myCanvas.style.position = 'absolute';
+            // Add int into the container
+            canvasContainer.appendChild(myCanvas);
         }
-    }
 
-    function createCanvasOverlay() {
-        // Create a blank div where we are going to put the canvas into.
-        var canvasContainer = document.createElement('div');
-        // Add the div into the document
-        document.body.appendChild(canvasContainer);
-        canvasContainer.style.position = "absolute";
-        // Set to 100% so that it will have the dimensions of the document
-        canvasContainer.style.left = "0px";
-        canvasContainer.style.top = "0px";
-        canvasContainer.style.width = "100%";
-        canvasContainer.style.height = "100%";
-        // Set to high index so that this is always above everything else
-        // (might need to be increased if you have other element at higher index)
-        canvasContainer.style.zIndex = "1000";
+        function sessionReplay() {
+            href = window.location.href.split('/');
+            session_id = href.indexOf('session');
+            if (session_id != -1) {
+                session_id = href[session_id += 1];
+            }
+            height = window.innerHeight;
+            width = window.innerWidth;
+            document.body.innerHTML = '';
 
-        // Now we create the canvas
-        myCanvas = document.createElement('canvas');
-        myCanvas.id = "myCanvas";
+            var iframe = document.createElement('iframe');
+            iframe.id = "iframe";
+            // iframe.setAttribute("style", "width: 100%; height: 100%");
+            iframe.width = width;
+            iframe.height = height;
 
-        myCanvas.style.width = canvasContainer.scrollWidth + "px";
-        myCanvas.style.height = canvasContainer.scrollHeight + "px";
-        // You must set this otherwise the canvas will be streethed to fit the container
-        myCanvas.width = canvasContainer.scrollWidth;
-        myCanvas.height = canvasContainer.scrollHeight;
-        myCanvas.style.overflow = 'visible';
-        // myCanvas.style.position = 'absolute';
-        // Add int into the container
-        canvasContainer.appendChild(myCanvas);
-    }
-
-    function sessionReplay() {
-        href = window.location.href.split('/');
-        session_id = href.indexOf('session');
-        if (session_id != -1) {
-            session_id = href[session_id += 1];
-        }
-        height = window.innerHeight;
-        width = window.innerWidth;
-        document.body.innerHTML = '';
-
-        var iframe = document.createElement('iframe');
-        iframe.id = "iframe";
-        // iframe.setAttribute("style", "width: 100%; height: 100%");
-        iframe.width = width;
-        iframe.height = height;
-
-        $.ajax({
-            url: 'reports/session/replay/' + session_id,
-            type: "GET",
-            success: function(json) {
-                var x = 0;
-                positions = [];
-                moves = json['moves'];
-                for (x in moves) {
-                    if (moves[x][0] == "MouseClick") {
-                        positions.push(moves[x][1]);
-                        positions.push(moves[x][2]);
-                        positions.push(moves[x][3]);
-                        positions.push(moves[x][4]);
-                    } else {
-                        var coordinates = moves[x][1].split(',');
-                        var time = moves[x][3];
-                        while (coordinates.length != 0) {
-                            var oneMouseMove = coordinates.splice(0, 2);
-                            positions.push(oneMouseMove[0]);
-                            positions.push(oneMouseMove[1]);
+            $.ajax({
+                url: 'reports/session/replay/' + session_id,
+                type: "GET",
+                success: function(json) {
+                    var x = 0;
+                    positions = [];
+                    moves = json['moves'];
+                    for (x in moves) {
+                        if (moves[x][0] == "MouseClick") {
+                            positions.push(moves[x][1]);
                             positions.push(moves[x][2]);
-                            positions.push(time);
-                            time += 1000;
+                            positions.push(moves[x][3]);
+                            positions.push(moves[x][4]);
+                        } else {
+                            var coordinates = moves[x][1].split(',');
+                            var time = moves[x][3];
+                            while (coordinates.length != 0) {
+                                var oneMouseMove = coordinates.splice(0, 2);
+                                positions.push(oneMouseMove[0]);
+                                positions.push(oneMouseMove[1]);
+                                positions.push(moves[x][2]);
+                                positions.push(time);
+                                time += 1000;
+                            }
                         }
                     }
+                    console.log(positions);
+
+                    iframe.height = json['height'];
+                    document.body.appendChild(iframe);
+                    // document.getElementById('iframe').setAttribute('src', 'http://ranael-garem.github.io/coffeefinder.html');
+                    // document.getElementById('iframe').setAttribute('src', 'http://127.0.0.1:8000');
+                    document.getElementById('iframe').setAttribute('src', positions[0][1]);
+
+                    $('iframe').load(function() {
+
+                        createCanvasOverlay();
+
+                        run(positions);
+                        
+                    });
+                },
+                error: function(response) {
+                    console.log(response);
                 }
-                console.log(positions);
+            });
+        };
 
-                iframe.height = json['height'];
-                document.body.appendChild(iframe);
-                createCanvasOverlay();
-
-                run(positions, json['url']);
-            },
-            error: function(response) {
-                console.log(response);
-            }
-        });
-    };
-
-    sessionReplay();
+        sessionReplay();
     </script>
 </body>
 
