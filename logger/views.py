@@ -311,4 +311,8 @@ class ClearSessionView(APIView):
             del request.session['session_id']
         except KeyError:
             pass
+        try:
+            del request.session['page_load']
+        except KeyError:
+            pass
         return Response("SESSION CLEARED")
