@@ -360,7 +360,8 @@ class IframeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IframeView, self).get_context_data(**kwargs)
-        context['url'] = self.kwargs['url']
+        page = Page.objects.get(id=self.kwargs['page_id'])
+        context['url'] = page.href
         return context
 
 
@@ -370,7 +371,10 @@ class ScreenShotCreateView(APIView):
     """
 
     def post(self, request, format=None):
-        source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
+        # source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
+        print "PRINT", request.data.items()[0][0][:30]
+        print "PRINT", request.data.items()[1][1]
+        source = request.data.items()[1][1] + ';' + request.data.items()[0][0]
 
         source = str(source)
         source = source.replace(" ", "+")
