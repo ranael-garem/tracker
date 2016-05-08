@@ -146,6 +146,7 @@ function sendMouseMoves() {
     img.height = 1;
     var html = document.getElementsByTagName("HTML")[0];
     html.appendChild(img);
+}
 
 document.onreadystatechange = function() {
     Client = new HttpClient();
@@ -164,11 +165,11 @@ document.onreadystatechange = function() {
                 var body = document.body,
                     html = document.documentElement;
 
-                var height = Math.max( body.scrollHeight, body.offsetHeight, 
-                                       html.clientHeight, html.scrollHeight, html.offsetHeight );
+                var height = Math.max(body.scrollHeight, body.offsetHeight,
+                    html.clientHeight, html.scrollHeight, html.offsetHeight);
                 console.log(height);
                 var img = document.createElement("img");
-                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + height  + '/pathname/x' + pathname  + demographics + '/' + navigator.language + '/href/' + window.location.href;
+                img.src = 'http://tracker.juniorgeorgy.webfactional.com/load/' + tracker_id + '/' + height + '/pathname/x' + pathname + demographics + '/' + navigator.language + '/href/' + window.location.href;
                 img.width = 1;
                 img.height = 1;
                 var html = document.getElementsByTagName("HTML")[0];
@@ -199,7 +200,7 @@ window.onclick = function(e) {
     }
 
     var img = document.createElement("img");
-    img.src = 'http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y  + '/pathname/x' + pathname + '/href/' + window.location.href;
+    img.src = 'http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/pathname/x' + pathname + '/href/' + window.location.href;
     img.width = 1;
     img.height = 1;
     var html = document.getElementsByTagName("HTML")[0];
