@@ -445,10 +445,12 @@ class SessionReplayView(APIView):
             time = ((object.created_at - first_time).seconds) * 1000
             if isinstance(object, MouseMove):
                 list.append(
-                    ("MouseMove", object.coordinates, object.page.href, time))
+                    ("MouseMove", object.coordinates, object.page.href,
+                        time, object.page.height))
             else:
                 list.append(
-                    ("MouseClick", object.y, object.x, object.page.href, time))
+                    ("MouseClick", object.y, object.x, object.page.href,
+                        time, object.page.height))
 
         time = []
         for object in result_list:
