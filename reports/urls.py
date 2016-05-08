@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^countries/(?P<pk>[0-9]+)/(?P<FY>\d{4})/(?P<FM>\d+)/(?P<FD>\d+)/(?P<TY>\d{4})/(?P<TM>\d+)/(?P<TD>\d+)/$',
         reports_views.CountriesView.as_view()),
 
-    url(r'^scroll/heatmap/(?P<url>.*)$', reports_views.IframeView.as_view()),
+    url(r'^scroll/heatmap/(?P<page_id>.*)$', reports_views.IframeView.as_view()),
 
     url(r'^scroll/heights/(?P<pk>[0-9]+)/(?P<path>.*)$',
         reports_views.ScrollHeightsView.as_view()),
