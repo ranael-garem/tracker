@@ -145,11 +145,11 @@ class PageLoadView(APIView):
             path = '/'
         else:
             path = path[1:]
-        (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk, href=href)
+        (page, created) = Page.objects.get_or_create(tracker_id=pk, href=href)
+        page.path_name = path
         if page.height != height:
             page.height = height
-            page.save()
+        page.save()
 
         page_load = PageLoad.objects.create(
             session=user_session, user_id=user_id, page=page)
@@ -202,8 +202,9 @@ class MouseClickView(APIView):
             path = '/'
         else:
             path = path[1:]
-        (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk, href=href)
+        (page, created) = Page.objects.get_or_create(tracker_id=pk, href=href)
+        page.path_name = path
+        page.save()
         MouseClick.objects.create(
             session=user_session, user_id=user_id, page=page, x=x, y=y)
 
@@ -249,7 +250,9 @@ class MouseMoveView(APIView):
         else:
             path = path[1:]
         (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk, href=href)
+            tracker_id=pk, href=href)
+        page.path_name = path
+        page.save()
         MouseMove.objects.create(
             session=user_session,
             user_id=user_id, page=page,

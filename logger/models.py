@@ -64,9 +64,9 @@ class Page(models.Model):
     Represents a page of website being tracked
     """
     tracker = models.ForeignKey(Tracker, related_name="pages")
-    path_name = models.CharField(max_length=128, unique=True)
+    path_name = models.CharField(max_length=128, null=True, blank=True)
     height = models.IntegerField(default=700)
-    href = models.CharField(max_length=256)
+    href = models.CharField(max_length=256, unique=True)
 
     def __unicode__(self):
         return self.href
