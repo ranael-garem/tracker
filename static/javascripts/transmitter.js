@@ -138,11 +138,14 @@ function screenShot() {
 }
 
 function sendMouseMoves() {
-    var movesToSend = mouse_moves.slice(1, 10);
+    var movesToSend = mouse_moves;
     mouse_moves = [];
-    // Client.post('http://tracker.juniorgeorgy.webfactional.com/mouse/move/' + tracker_id + '/' + pathname, movesToSend, function(response) {
-    // });
-}
+    var img = document.createElement("img");
+    img.src = 'http://tracker.juniorgeorgy.webfactional.com/mouse/move/' + tracker_id + '/pathname/x' + pathname + '/href/' + window.location.href + '/coordinates/' + movesToSend;
+    img.width = 1;
+    img.height = 1;
+    var html = document.getElementsByTagName("HTML")[0];
+    html.appendChild(img);
 
 document.onreadystatechange = function() {
     Client = new HttpClient();
@@ -200,8 +203,7 @@ window.onclick = function(e) {
     img.width = 1;
     img.height = 1;
     var html = document.getElementsByTagName("HTML")[0];
-    html.insertBefore(img, html.firstChild);
-
+    html.appendChild(img);
 }
 
 window.onbeforeunload = function(e) {
@@ -210,7 +212,7 @@ window.onbeforeunload = function(e) {
 };
 
 window.onmousemove = function(e) {
-    if (mouse_moves.length == 100) {
+    if (mouse_moves.length == 200) {
         sendMouseMoves();
     }
     if (!invoke) {
