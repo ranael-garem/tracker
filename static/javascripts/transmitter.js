@@ -194,10 +194,9 @@ window.onclick = function(e) {
     sendMouseMoves();
     var x = e.layerX;
     var y = e.layerY;
-    if (e.touches) {
-        x = e.touches[0].pageX;
-        y = e.touches[0].pageY;
-    }
+    var coordinates = findDocumentCoords(e);
+    var x = coordinates[0];
+    var y = coordinates[1];
 
     var img = document.createElement("img");
     img.src = 'http://tracker.juniorgeorgy.webfactional.com/click/' + tracker_id + '/' + x + '/' + y + '/pathname/x' + pathname + '/href/' + window.location.href;
@@ -219,7 +218,28 @@ window.onmousemove = function(e) {
     if (!invoke) {
         return;
     }
-    var x = e.layerX;
-    var y = e.layerY;
+    var coordinates = findDocumentCoords(e);
+    var x = coordinates[0];
+    var y = coordinates[1];
     mouse_moves.push(x + ',' + y);
+}
+
+function findDocumentCoords(mouseEvent)
+{
+  var xpos
+  var ypos;
+  if (mouseEvent)
+  {
+    //FireFox
+    xpos = mouseEvent.pageX;
+    ypos = mouseEvent.pageY;
+  }
+  else
+  {
+    //IE
+    xpos = window.event.x + document.body.scrollLeft - 2;
+    ypos = window.event.y + document.body.scrollTop - 2;
+  }
+
+  return [xpos, ypos]
 }
