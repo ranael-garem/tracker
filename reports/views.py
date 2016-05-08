@@ -392,7 +392,9 @@ class ScreenShotCreateView(APIView):
         screenshot.image = ContentFile(decoded_image, filename)
         screenshot.save()
 
-        return Response({'screenshot_id': screenshot.id})
+        return Response({'screenshot_id': screenshot.id,
+                         'print1': request.data.items()[0][0][:30],
+                         "print2": request.data.items()[1][1]})
 
 
 class ScrollHeatMapCanvasView(TemplateView):
