@@ -129,7 +129,7 @@ document.onreadystatechange = function() {
     if (document.readyState == "complete" && window.location.href.indexOf("heatmapx") > -1) {
         mouseClickHeatMap();
     } else if (document.readyState == "complete" && document.referrer.indexOf("/reports/scroll/heatmap/") > -1) {
-        screenShot();
+        // screenShot();
 
     } else if (document.readyState == "complete") {
         $.ajax({
