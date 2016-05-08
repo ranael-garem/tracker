@@ -213,7 +213,7 @@ class MouseClickView(APIView):
 
 
 class MouseMoveView(APIView):
-    def post(self, request, pk, path, format=None):
+    def get(self, request, pk, path, href, coordinates, format=None):
         if 'user_id' in request.session:
             user_id = request.session['user_id']
         else:
@@ -243,8 +243,7 @@ class MouseMoveView(APIView):
             request.session['session_id'] = user_session.id
 
         (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk)
-        coordinates = request.data['data']
+            path_name=path, tracker_id=pk, href=href)
         MouseMove.objects.create(
             session=user_session,
             user_id=user_id, page=page,

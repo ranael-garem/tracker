@@ -27,9 +27,11 @@ urlpatterns = [
     url(r'^click/(?P<pk>[0-9]+)/(?P<x>[0-9]+)/(?P<y>[0-9]+)/pathname/(?P<path>.*)/href/(?P<href>.*)$',
         logger_views.MouseClickView.as_view()),
 
-    url(r'^mouse/move/(?P<pk>[0-9]+)/(?P<path>.*)$',
-        logger_views.MouseMoveView.as_view()),
+    # url(r'^mouse/move/(?P<pk>[0-9]+)/(?P<path>.*)$',
+    #     logger_views.MouseMoveView.as_view()),
 
+    url(r'^mouse/move/(?P<pk>[0-9]+)/pathname(?P<path>.*)/href/(?P<href>.*)/coordinates/(?P<coordinates>.*)$',
+        logger_views.MouseMoveView.as_view()),
     url(r'^api/scroll/(?P<scroll>[0-9]+)/', logger_views.ScrollView.as_view()),
 
     url(r'^user/$', logger_views.UserIdSessionIdView.as_view(),
