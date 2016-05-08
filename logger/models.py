@@ -41,7 +41,7 @@ class Session(models.Model):
     expiry_date = models.DateTimeField(
         default=timezone.now() + datetime.timedelta(minutes=30))
     country_code = models.CharField(max_length=128, default="Unknown")
-    country_name = models.CharField(max_length=128, default="Not Set") 
+    country_name = models.CharField(max_length=128, default="Not Set")
 
     def __unicode__(self):
         return str(self.id)
