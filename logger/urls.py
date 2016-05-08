@@ -30,7 +30,7 @@ urlpatterns = [
     # url(r'^mouse/move/(?P<pk>[0-9]+)/(?P<path>.*)$',
     #     logger_views.MouseMoveView.as_view()),
 
-    url(r'^mouse/move/(?P<pk>[0-9]+)/pathname(?P<path>.*)/href/(?P<href>.*)/coordinates/(?P<coordinates>.*)$',
+    url(r'^mouse/move/(?P<pk>[0-9]+)/pathname/(?P<path>.*)/href/(?P<href>.*)/coordinates/(?P<coordinates>.*)$',
         logger_views.MouseMoveView.as_view()),
     url(r'^api/scroll/(?P<scroll>[0-9]+)/', logger_views.ScrollView.as_view()),
 
