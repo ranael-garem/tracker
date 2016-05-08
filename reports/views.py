@@ -394,7 +394,8 @@ class ScreenShotCreateView(APIView):
 
         return Response({'screenshot_id': screenshot.id,
                          'print1': request.data.items()[0][0][:30],
-                         "print2": request.data.items()[1][1]})
+                         "print2": request.data.items()[1][1],
+                         "request": request.data.items()})
 
 
 class ScrollHeatMapCanvasView(TemplateView):
