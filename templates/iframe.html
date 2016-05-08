@@ -1,6 +1,6 @@
 {% load static %}
 <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
-<script type="text/javascript" src="{% static "html2canvas.js" %}"></script>
+<script type="text/javascript" src="{% static " html2canvas.js " %}"></script>
 <style type="text/css">
 body {
     margin: 0;
@@ -10,7 +10,6 @@ body {
     <iframe id="iframe" style="border: 0; width: 100%; height: 100%" src="{{url}}"></iframe>
 </div>
 <script type="text/javascript">
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -55,8 +54,8 @@ var HttpClient = function() {
         HttpRequest.send("data=" + Parameters + "");
     }
 }
-var pathname = window.location.pathname
-
+var pathname = window.location.pathname;
+var tracker_id = 2;
 $('iframe').load(function() {
     setTimeout(function() {
         html2canvas(document.body, {
