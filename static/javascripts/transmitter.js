@@ -112,32 +112,6 @@ function mouseClickHeatMap() {
     });
 }
 
-function screenShot() {
-    setTimeout(function() {
-        html2canvas(document.body, {
-            allowTaint: 'false',
-            onrendered: function(canvas) {
-                var data = canvas.toDataURL();
-                console.log(data);
-                document.body.innerHTML = '';
-                var img = document.createElement('img');
-                img.id = "image";
-                img.src = data;
-                document.body.appendChild(img);
-                // scrollHeatMap();
-                Client = new HttpClient();
-                Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
-                    var data = JSON.parse(response);
-                    alert(pathname);
-                    pathname = pathname.substring(1, pathname.length)
-                    tracker_id = String(tracker_id).replace('+', '');
-                    window.location.href = 'http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
-                })
-            }
-        });
-    }, 2000);
-}
-
 function sendMouseMoves() {
     var movesToSend = mouse_moves;
     mouse_moves = [];
