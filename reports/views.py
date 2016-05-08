@@ -371,10 +371,10 @@ class ScreenShotCreateView(APIView):
     """
 
     def post(self, request, format=None):
-        # source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
+        source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
         print "PRINT", request.data.items()[0][0][:30]
         print "PRINT", request.data.items()[1][1]
-        source = request.data.items()[1][1] + ';' + request.data.items()[0][0]
+        # source = request.data.items()[1][1] + ';' + request.data.items()[0][0]
 
         source = str(source)
         source = source.replace(" ", "+")
@@ -393,9 +393,8 @@ class ScreenShotCreateView(APIView):
         screenshot.save()
 
         return Response({'screenshot_id': screenshot.id,
-                         'print1': request.data.items()[0][0][:30],
-                         "print2": request.data.items()[1][1],
-                         "request": request.data.items()})
+                         "request": request.data.items(),
+                         'source': source})
 
 
 class ScrollHeatMapCanvasView(TemplateView):
