@@ -25,16 +25,16 @@
 </div>
 <script type="text/javascript">
 var href = window.location.href.split('/');
-var session_id = href.indexOf('sessions');
-if (session_id != -1) {
-    session_id = href[session_id += 1];
-    var hash = session_id.indexOf('#');
+var tracker_id = href.indexOf('sessions');
+if (tracker_id != -1) {
+    tracker_id = href[tracker_id += 1];
+    var hash = tracker_id.indexOf('#');
     if (hash != -1) {
-        session_id = session_id.substring(0, hash);
+        tracker_id = tracker_id.substring(0, hash);
     }
 }
 $.ajax({
-    url: "api/trackers/" + session_id + "/sessions/",
+    url: "api/trackers/" + tracker_id + "/sessions/",
     type: "GET",
     success: function(json) {
         var x = 0;
@@ -42,8 +42,8 @@ $.ajax({
             $('#session-replay > tbody:last-child').append('<tr><td> No Session replays created</td></tr>');
         }
         for (x in json) {
-            $('#session-replay > tbody:last-child').append('<tr><td><a href="http://tracker.juniorgeorgy.webfactional.com/session/' + session_id + '" target="_blank">' + json[x]['id'] + '</a></td><td><a href="http://tracker.juniorgeorgy.webfactional.com/session/' + session_id + '" target="_blank">' + json[x]['created_at'] + '</a></td><td><a href="http://tracker.juniorgeorgy.webfactional.com/session/' + session_id + '" target="_blank">' + json[x]['country_name'] + '</a></td></tr>');
-            // $('#session-replay > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/session/' + session_id + '" target="_blank">' + json[x]['id'] + '</a></td><td><a href="http://127.0.0.1:8000/session/' + session_id + '" target="_blank">' + json[x]['created_at'] + '</a></td><td><a href="http://127.0.0.1:8000/session/' + session_id + '" target="_blank">' + json[x]['country_name'] + '</a></td></tr>');
+            $('#session-replay > tbody:last-child').append('<tr><td><a href="http://tracker.juniorgeorgy.webfactional.com/session/' + json[x]['id'] + '" target="_blank">' + json[x]['id'] + '</a></td><td><a href="http://tracker.juniorgeorgy.webfactional.com/session/' + json[x]['id'] + '" target="_blank">' + json[x]['created_at'] + '</a></td><td><a href="http://tracker.juniorgeorgy.webfactional.com/session/' + json[x]['id'] + '" target="_blank">' + json[x]['country_name'] + '</a></td></tr>');
+            // $('#session-replay > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/session/' + json[x]['id'] + '" target="_blank">' + json[x]['id'] + '</a></td><td><a href="http://127.0.0.1:8000/session/' + json[x]['id'] + '" target="_blank">' + json[x]['created_at'] + '</a></td><td><a href="http://127.0.0.1:8000/session/' + json[x]['id'] + '" target="_blank">' + json[x]['country_name'] + '</a></td></tr>');
         }
         $('#session-replay').datatable({
             pageSize: 15,
