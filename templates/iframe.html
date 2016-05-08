@@ -1,9 +1,71 @@
 {% load static %}
-
 <style type="text/css">
-  body {
+body {
     margin: 0;
 }
 </style>
+<div id="iframe">
+    <iframe id="iframe" style="border: 0; width: 100%; height: 100%" src="{{url}}"></iframe>
+</div>
+<script type="text/javascript">
+var HttpClient = function() {
+    this.get = function(Url, Callback) {
+        var HttpRequest = new XMLHttpRequest();
+        HttpRequest.onreadystatechange = function() {
+            if (HttpRequest.readyState == 4 && HttpRequest.status == 200)
+                Callback(HttpRequest.responseText);
+        }
 
-<div id="iframe"><iframe id="iframe"style="border: 0; width: 100%; height: 100%" src="{{url}}"></iframe></div>
+        HttpRequest.open("GET", Url, true);
+        HttpRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+        HttpRequest.setRequestHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        HttpRequest.send(null);
+    }
+
+    this.post = function(Url, Parameters, Callback) {
+        var HttpRequest = new XMLHttpRequest();
+        HttpRequest.onreadystatechange = function() {
+            if (HttpRequest.readyState == 4 && HttpRequest.status == 200)
+                Callback(HttpRequest.responseText);
+        }
+
+        HttpRequest.open("POST", Url, true);
+        HttpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var csrftoken = getCookie('csrftoken');
+        HttpRequest.setRequestHeader("X-CSRFToken", csrftoken);
+        HttpRequest.send("data=" + Parameters + "");
+    }
+}
+
+$('iframe').load(function() {
+    setTimeout(function() {
+        html2canvas(document.body, {
+            allowTaint: 'false',
+            onrendered: function(canvas) {
+                var data = canvas.toDataURL();
+                console.log(data);
+                document.body.innerHTML = '';
+                var img = document.createElement('img');
+                img.id = "image";
+                img.src = data;
+                document.body.appendChild(img);
+                // scrollHeatMap();
+                Client = new HttpClient();
+                Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
+                    // Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
+
+                    var data = JSON.parse(response);
+                    alert(pathname);
+                    pathname = pathname.substring(1, pathname.length);
+                    tracker_id = String(tracker_id).replace('+', '');
+                    window.location.href = 'http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
+                    // window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
+
+
+                })
+            }
+        });
+    }, 2000);
+
+})
+</script>
