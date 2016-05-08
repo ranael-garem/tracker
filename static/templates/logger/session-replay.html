@@ -14,11 +14,15 @@
     <!--<div><iframe id="iframe"style="border: 0; width: 100%; height: 100%" src=""></iframe></div>-->
     <!--<canvas id="myCanvas" style="width: 100%; height: 100%"></canvas>-->
     <script type="text/javascript">
+    var preTime = 0;
+
+    sessionReplay();
+
     function replay(x, y, href, height) {
-        console.log('X: ' + x + ', Y: ' + y);
+        // console.log('X: ' + x + ', Y: ' + y);
         if (document.getElementById('iframe').src != href) {
             document.getElementById('iframe').setAttribute('src', href);
-            setTimeout(console.log('Delay'), 3000);
+            setTimeout(console.log('Please Wait'), 5000);
             redrawCanvas(height);
             document.getElementById('iframe').height = height;
         }
@@ -33,11 +37,8 @@
             ctx.drawImage(imageObj, x, y);
         };
         // imageObj.src = 'http://127.0.0.1:8000/static/images/pointer.gif';
-        imageObj.src = 'http://tracker.juniorgeorgy.webfactional.com/static/images/pointer.gif';
+        imageObj.src = 'http://tracker.juniorgeorgy.webfactional.com/static/images/pointer2.gif';
     }
-
-
-    var preTime = 0;
 
     function run(positions) {
         var coordinates = positions.splice(0, 5) // after splice, positions will be auto updated
@@ -144,7 +145,7 @@
                 $('iframe').load(function() {
                     if (flag) {
                         createCanvasOverlay(json['height']);
-
+                        console.log('IFRAME LOADED');
                         run(positions);
                         flag = false;
 
@@ -163,7 +164,6 @@
         canvas.style.height = "" + height + "px";
         canvas.height = height;
     }
-    sessionReplay();
     </script>
 </body>
 
