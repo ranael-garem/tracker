@@ -398,8 +398,11 @@ class ScreenShotCreateView(APIView):
         screenshot.save()
 
         return Response({'screenshot_id': screenshot.id,
-                        'filename': filename,
-                         'source': source})
+                         'filename': filename,
+                         'source': source},
+                        headers={"Access-Control-Allow-Origin": "*",
+                                 "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+                                 })
 
 
 class ScrollHeatMapCanvasView(TemplateView):
