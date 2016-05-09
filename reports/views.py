@@ -374,7 +374,7 @@ class ScreenShotCreateView(APIView):
         source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
         print "PRINT", request.data.items()[0][0][:30]
         print "PRINT", request.data.items()[1][1]
-        # source = request.data.items()[1][1] + ';' + request.data.items()[0][0]
+        source = request.data.items()[1][1] + ';' + request.data.items()[0][0]
 
         source = str(source)
         source = source.replace(" ", "+")
