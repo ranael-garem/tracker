@@ -59,7 +59,7 @@ var tracker_id = 2;
 $('iframe').load(function() {
     setTimeout(function() {
         html2canvas(document.body, {
-            allowTaint: 'false',
+            allowTaint: 'true',
             onrendered: function(canvas) {
                 var data = canvas.toDataURL();
                 console.log(data);
