@@ -1,3 +1,8 @@
+$.getScript("http://tracker.juniorgeorgy.webfactional.com/static/html2canvas.js", function(){
+
+   alert("Script loaded but not necessarily executed.");
+
+});
 var tracker_id;
 var scripts = document.getElementsByTagName('script');
 for (i = 0; i < scripts.length; i++) {
