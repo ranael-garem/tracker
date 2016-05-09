@@ -16,7 +16,7 @@
   function scrollHeatMap(){
       var src = '{{ screenshot.image.url }}';
         $.ajax({
-          url: '/reports/scroll/heights/' + {{tracker_id}} + '/' + '{{pathname}}',
+          url: '/reports/scroll/heights/' + {{tracker_id}} + '/' + '{{href}}',
           type: "GET",
           success: function(json) {
               var dict = {};
@@ -29,7 +29,7 @@
               console.log(positions);
             var positionData = [
                 {
-                  height: 700,
+                  height: {{ screenshot_height }},
                   positions: positions
                 }
               ];

@@ -1,14 +1,21 @@
 {% load static %}
-<script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
-<script type="text/javascript" src="{% static "html2canvas.js" %}"></script>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
 <style type="text/css">
 body {
     margin: 0;
 }
 </style>
+</head>
+<body>
+
 <div id="iframe">
-    <iframe id="iframe" style="border: 0; width: 100%; height: 100%" src="{{url}}"></iframe>
+    <iframe id="iframe" style="border: 0; width: 100%" height="{{height}}" src="{{url}}"></iframe>
 </div>
+<script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static "html2canvas.js" %}"></script>
 <script type="text/javascript">
 function getCookie(name) {
     var cookieValue = null;
@@ -54,12 +61,12 @@ var HttpClient = function() {
         HttpRequest.send("data=" + Parameters + "");
     }
 }
-var pathname = window.location.pathname;
-var tracker_id = 2;
+// var pathname = window.location.pathname;
+var tracker_id = 1;
 $('iframe').load(function() {
     setTimeout(function() {
         html2canvas(document.body, {
-            allowTaint: 'true',
+            allowTaint: 'false',
             onrendered: function(canvas) {
                 var data = canvas.toDataURL();
                 console.log(data);
@@ -68,17 +75,18 @@ $('iframe').load(function() {
                 img.id = "image";
                 img.src = data;
                 document.body.appendChild(img);
-                // scrollHeatMap();
+                // // scrollHeatMap();
                 Client = new HttpClient();
-                Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
-                    // Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
+                // Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
+                    Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
 
                     var data = JSON.parse(response);
-                    alert(pathname);
-                    pathname = pathname.substring(1, pathname.length);
-                    tracker_id = String(tracker_id).replace('+', '');
+                    // alert(pathname);
+                    // pathname = 'dashboard/1';
+                    // pathname = phathname.substring(1, pathname.length);
+                    // tracker_id = String(tracker_id).replace('+', '');
                     // window.location.href = 'http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
-                    // window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + pathname;
+                    window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + {{tracker_id}} + '/' + '{{url}}';
 
 
                 })
@@ -88,3 +96,5 @@ $('iframe').load(function() {
 
 })
 </script>
+</body>
+</html>
