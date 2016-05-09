@@ -159,7 +159,7 @@ document.onreadystatechange = function() {
     // console.log(document.referrer);
     if (document.readyState == "complete" && window.location.href.indexOf("heatmapx") > -1) {
         mouseClickHeatMap();
-    } else if (document.readyState == "complete" && window.location.hash("scroll") > -1) {
+    } else if (document.readyState == "complete" && window.location.hash.indexOf("scroll") > -1) {
         screenShot();
 
     } else if (document.readyState == "complete") {
