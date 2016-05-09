@@ -371,11 +371,14 @@ class ScreenShotCreateView(APIView):
     """
 
     def post(self, request, format=None):
-        source = request.data.items()[0][1] + ';' + request.data.items()[1][0]
+        source1 = request.data.items()[0][1] + ';' + request.data.items()[1][0]
         print "PRINT", request.data.items()[0][0][:30]
         print "PRINT", request.data.items()[1][1]
-        source = request.data.items()[1][1] + ';' + request.data.items()[0][0]
-
+        source2 = request.data.items()[1][1] + ';' + request.data.items()[0][0]
+        if source1.startswith('data:image/'):
+            source = source1
+        else:
+            source = source2
         source = str(source)
         source = source.replace(" ", "+")
 
