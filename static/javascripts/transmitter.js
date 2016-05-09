@@ -66,6 +66,37 @@ var HttpClient = function() {
     }
 }
 
+function screenShot(){
+    setTimeout(function() {
+    html2canvas(document.body, {
+        allowTaint: 'false',
+        onrendered: function(canvas) {
+            var data = canvas.toDataURL();
+            console.log(data);
+            document.body.innerHTML = '';
+            var img = document.createElement('img');
+            img.id = "image";
+            img.src = data;
+            document.body.appendChild(img);
+            // // scrollHeatMap();
+            Client = new HttpClient();
+            Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
+                // Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
+
+                var data = JSON.parse(response);
+                // alert(pathname);
+                // pathname = 'dashboard/1';
+                // pathname = phathname.substring(1, pathname.length);
+                // tracker_id = String(tracker_id).replace('+', '');
+                // window.location.href = 'http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heat/map/' + data.screenshot_id + '/' + tracker_id + '/' + window.location.href;
+                // window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + {{tracker_id}} + '/' + '{{url}}';
+
+
+            })
+        }
+    });
+}, 2000);
+}
 
 function heatMapCanvas(clicks, body) {
     var heatmap = h337.create({
@@ -128,8 +159,8 @@ document.onreadystatechange = function() {
     // console.log(document.referrer);
     if (document.readyState == "complete" && window.location.href.indexOf("heatmapx") > -1) {
         mouseClickHeatMap();
-    } else if (document.readyState == "complete" && document.referrer.indexOf("/reports/scroll/heatmap/") > -1) {
-        // screenShot();
+    } else if (document.readyState == "complete" && window.location.hash("scroll") > -1) {
+        screenShot();
 
     } else if (document.readyState == "complete") {
         $.ajax({

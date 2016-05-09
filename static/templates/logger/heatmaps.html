@@ -81,9 +81,11 @@
                 // $('#click-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/heatmap/'+ json[x]['id'] + '" target="_blank">' + json[x]['path_name'] + '</a><br></td></tr>');
         		$('#click-heat-map > tbody:last-child').append('<tr><td><a href="http://tracker.juniorgeorgy.webfactional.com/heatmap/'+ json[x]['id'] + '" target="_blank">' + json[x]['path_name'] + '</a><br></td></tr>');
         		// $('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/reports/scroll/heatmap/http://127.0.0.1:8000/' + json[x]['path_name'] + '#scroll" target="_blank">' + json[x]['path_name'] +'</a></td></tr>');
-                $('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heatmap/' + json[x]['id'] + '" target="_blank">' + json[x]['path_name'] +'</a></td></tr>');
+                // $('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heatmap/' + json[x]['id'] + '" target="_blank">' + json[x]['path_name'] +'</a></td></tr>');
 
-                $('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/reports/scroll/heatmap/' + json[x]['id'] + '" target="_blank"> LOCAL- ' + json[x]['path_name'] +'</a></td></tr>');
+                // $('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="http://127.0.0.1:8000/reports/scroll/heatmap/' + json[x]['id'] + '" target="_blank"> LOCAL- ' + json[x]['path_name'] +'</a></td></tr>');
+                $('#scroll-heat-map > tbody:last-child').append('<tr><td><a href="' + json[x]['href'] + '#scroll" target="_blank">' + json[x]['path_name'] +'</a></td></tr>');
+
         	}
         	$('#click-heat-map').datatable({
 			    pageSize: 10,
