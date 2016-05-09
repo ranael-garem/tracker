@@ -41,13 +41,13 @@ urlpatterns = [
 
     url(r'^scroll/heatmap/(?P<page_id>.*)$', reports_views.IframeView.as_view()),
 
-    url(r'^scroll/heights/(?P<pk>[0-9]+)/(?P<path>.*)$',
+    url(r'^scroll/heights/(?P<pk>[0-9]+)/(?P<href>.*)$',
         reports_views.ScrollHeightsView.as_view()),
 
     url(r'^scroll/screenshot/$',
         reports_views.ScreenShotCreateView.as_view()),
 
-    url(r'^scroll/heat/map/(?P<screenshot_id>[0-9]+)/(?P<pk>[0-9]+)/(?P<path>.*)$',
+    url(r'^scroll/heat/map/(?P<screenshot_id>[0-9]+)/(?P<pk>[0-9]+)/(?P<href>.*)$',
         reports_views.ScrollHeatMapCanvasView.as_view()),
 
     url(r'^session/replay/(?P<pk>[0-9]+)$',
