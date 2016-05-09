@@ -393,7 +393,7 @@ class ScreenShotCreateView(APIView):
         screenshot.save()
 
         return Response({'screenshot_id': screenshot.id,
-                         "request": request.data.items(),
+                        'filename': filename,
                          'source': source})
 
 
