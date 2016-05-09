@@ -362,6 +362,8 @@ class IframeView(TemplateView):
         context = super(IframeView, self).get_context_data(**kwargs)
         page = Page.objects.get(id=self.kwargs['page_id'])
         context['url'] = page.href
+        context['height'] = page.height
+        context['tracker_id'] = page.tracker_id
         return context
 
 
@@ -411,8 +413,9 @@ class ScrollHeatMapCanvasView(TemplateView):
             ScrollHeatMapCanvasView, self).get_context_data(**kwargs)
         screenshot = ScreenShot.objects.get(id=self.kwargs['screenshot_id'])
         context['screenshot'] = screenshot
+        context['screenshot_height'] = screenshot.image.height
         context['tracker_id'] = self.kwargs['pk']
-        context['pathname'] = self.kwargs['path']
+        context['href'] = self.kwargs['href']
         print context['tracker_id']
 
         return context
@@ -423,10 +426,12 @@ class ScrollHeightsView(APIView):
     Returns page height and page scroll heights
     """
 
-    def get(self, request, pk, path, format=None):
+    def get(self, request, pk, href, format=None):
+        if not href.startswith('http://'):
+            href = href[:6] + '/' + href[6:]
         sessions = Tracker.objects.get(id=pk).sessions.values('id')
         (page, created) = Page.objects.get_or_create(
-            path_name=path, tracker_id=pk)
+            href=href, tracker_id=pk)
         page_loads = PageLoad.objects.filter(
             session__in=sessions, page=page).values('scroll_height')
 
