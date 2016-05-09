@@ -77,8 +77,8 @@ $('iframe').load(function() {
                 document.body.appendChild(img);
                 // // scrollHeatMap();
                 Client = new HttpClient();
-                Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
-                    // Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
+                // Client.post('http://tracker.juniorgeorgy.webfactional.com/reports/scroll/screenshot/', data, function(response) {
+                    Client.post('http://127.0.0.1:8000/reports/scroll/screenshot/', data, function(response) {
 
                     var data = JSON.parse(response);
                     // alert(pathname);
@@ -86,7 +86,7 @@ $('iframe').load(function() {
                     // pathname = phathname.substring(1, pathname.length);
                     // tracker_id = String(tracker_id).replace('+', '');
                     // window.location.href = 'http://tracker.juniorgeorgy.webfactional.com/reports/scroll/heat/map/' + data.screenshot_id + '/' + {{tracker_id}} + '/' + '{{url}}';
-                    // window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + {{tracker_id}} + '/' + '{{url}}';
+                    window.location.href = 'http://127.0.0.1:8000/reports/scroll/heat/map/' + data.screenshot_id + '/' + {{tracker_id}} + '/' + '{{url}}';
 
 
                 })
